@@ -5,9 +5,9 @@ const { PORT }= require('./config')
 
 
 const db = mysql.createConnection({
-  host : '50.87.144.112',
-  user: 'allinhip_user0',
-  password: '+3mp0r@ry',
+  host : process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: 'allinhip_app'
 })
 
@@ -19,7 +19,6 @@ db.connect((err) => {
   //console.log('mysql connected');
 })
 
-app.use(compression());
 
 app.get('/getcustomerslist', (req, res) => {
   //console.log('getting /getcustomerslist');
@@ -47,17 +46,22 @@ const tomorrow = '2020-12-31';
 //AND driver = '${driver}'
 
 //need to figure out why crashing on load etc...
+const today = new Date()
 
 app.get('/getDailySchedule/:user', (req, res) => {
   console.log('getting /getdailyschedule/:user');
+  const todaysDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
+
   let sql = `SELECT schedules.vehicle , schedules.dropoff_info, stops.id,  stops.stop_number, stops.customer_id, customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments 
     FROM schedules JOIN route_list
     ON schedules.route_id = route_list.id
     JOIN stops ON stops.route_id = route_list.id
     JOIN customers on stops.customer_id = customers.customer_id
-    WHERE schedule_date BETWEEN '${today}' AND '${tomorrow}' AND driver = '${driver}'
+    WHERE schedule_date BETWEEN '${todaysDate}' AND '${tomorrowsDate}' AND driver = '${driver}'
     ORDER BY stop_number;`;
+    
   db.query(sql, (err, result) => {
     if (err) {
     //  console.log('error in db.query of /getdailyschedule/:user');
