@@ -33,9 +33,6 @@ app.get('/getcustomerslist', (req, res) => {
   })
 })
 
-//figure out how to set today and tomorow by a function etc.
-const today = '2020-12-30';
-const tomorrow = '2020-12-31';
 
 //figure out how to get driver from app api request (header etc.) adn how to send it in app
 //const driver = 'driver_1';
@@ -61,7 +58,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
     JOIN customers on stops.customer_id = customers.customer_id
     WHERE schedule_date BETWEEN '${todaysDate}' AND '${tomorrowsDate}' AND driver = '${driver}'
     ORDER BY stop_number;`;
-    
+
   db.query(sql, (err, result) => {
     if (err) {
     //  console.log('error in db.query of /getdailyschedule/:user');
