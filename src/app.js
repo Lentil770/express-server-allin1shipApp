@@ -1,11 +1,8 @@
 require('dotenv').config()
 const express = require('express')
-const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
-app.use(morgan(morganSetting))
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
-const compression = require('compression');
 
 const app = express()
 
@@ -17,7 +14,6 @@ app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors())
 app.use(express.json())
-app.use(compression())
 
 app.get('/', (req, res) => {
   res.send('Hello, world!')

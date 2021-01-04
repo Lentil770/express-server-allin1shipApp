@@ -16,7 +16,7 @@ db.connect((err) => {
     //console.log('error in db.connect.')
     throw err;
   }
-  //console.log('mysql connected');
+  console.log('mysql connected');
 })
 
 
@@ -102,7 +102,7 @@ app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
 
 
 app.listen(PORT, () => {
-  //console.log(`Server listening at http://localhost:${PORT}`)
+  console.log(`Server listening on this port.${PORT}`)
 })
 /*
 */
