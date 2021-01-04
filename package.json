@@ -1,7 +1,10 @@
 {
   "name": "express-server",
   "version": "1.0.0",
-  "description": "",
+  "engines": {
+    "node": "14.15.0"
+  },
+  "description": "server connecting from allin1ship routing app to database",
   "main": "index.js",
   "scripts": {
     "test": "mocha --require test/setup.js",
@@ -12,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

@@ -16,8 +16,10 @@ db.connect((err) => {
     //console.log('error in db.connect.')
     throw err;
   }
-  console.log('mysql connected');
+  //console.log('mysql connected');
 })
+
+app.use(compression());
 
 app.get('/getcustomerslist', (req, res) => {
   //console.log('getting /getcustomerslist');
@@ -58,48 +60,48 @@ app.get('/getDailySchedule/:user', (req, res) => {
     ORDER BY stop_number;`;
   db.query(sql, (err, result) => {
     if (err) {
-      console.log('error in db.query of /getdailyschedule/:user');
+    //  console.log('error in db.query of /getdailyschedule/:user');
       throw err
     }
-    console.log('got db.query of getdailyschedule/user. result:')
+    //console.log('got db.query of getdailyschedule/user. result:')
     res.json(result)
   })
 })
 
 app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
-  console.log('timestamp received, sending to db');
+  //console.log('timestamp received, sending to db');
   //this needs to receive drivers name, timestamp and date (and stop number?),
   //and add them to database
   let sql = `INSERT INTO timestamps (time_completed, driver, stop_number) 
   VALUES (now(), "${req.params.driver}", ${req.params.stop_number});`
   db.query(sql, (err, result) => {
     if (err) {
-      console.log('error sending timestamp to db');
+    //  console.log('error sending timestamp to db');
       throw err
     }
-    console.log('timestamp successfully sent to db');
+    //console.log('timestamp successfully sent to db');
     res.end()
   })
 })
 
 
 app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
-  console.log('feedback received, sending to db', req.body);
+  //console.log('feedback received, sending to db', req.body);
   let sql = `INSERT INTO driver_feedback (feedback_date, driver, stop_number, feedback) 
   VALUES (now(), "${req.params.driver}", ${req.params.stop_number}, "${req.body.feedback}");`
   db.query(sql, (err, result) => {
     if (err) {
-      console.log('error sending feedback to db');
+    //  console.log('error sending feedback to db');
       throw err
     }
-    console.log('feedback successfully sent to db');
+    //console.log('feedback successfully sent to db');
     res.json(req.body)
   })
 })
 
 
 app.listen(PORT, () => {
-  console.log(`Server listening at http://localhost:${PORT}`)
+  //console.log(`Server listening at http://localhost:${PORT}`)
 })
 /*
 */
