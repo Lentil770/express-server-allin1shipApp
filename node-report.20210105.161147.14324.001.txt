@@ -1,0 +1,232 @@
+================================================================================
+==== Node Report ===============================================================
+
+Event: exception, location: "OnUncaughtException"
+Filename: node-report.20210105.161147.14324.001.txt
+Dump event time:  2021/01/05 16:11:47
+Module load time: 2021/01/05 16:11:47
+Process ID: 14324
+Command line: "C:/Program Files/nodejs/node.exe" -r node-report express-server
+
+Node.js version: v14.15.0
+(v8: 8.4.371.19-node.17, uv: 1.40.0, zlib: 1.2.11, brotli: 1.0.9, ares: 1.16.1,
+ modules: 83, nghttp2: 1.41.0, napi: 7, llhttp: 2.1.3, openssl: 1.1.1g,
+ cldr: 37.0, icu: 67.1, tz: 2020a, unicode: 13.0)
+
+node-report version: 2.2.11 (built against Node.js v14.15.0, 64 bit)
+
+OS version: Windows 10
+
+Machine: LAPTOP-21FCL9Q4 
+
+================================================================================
+==== JavaScript Stack Trace ====================================================
+
+JavaScript VM state: JS
+
+ 0: [pc=0x0000025F5FFF62D0] Module._resolveFilename (internal/modules/cjs/loader.js:883:3)
+ 1: [pc=0x0000025F5FFF4FE0] Module._load (internal/modules/cjs/loader.js:725:27)
+ 2: [pc=0x0000017818883E54] executeUserEntryPoint (internal/modules/run_main.js:72:12)
+ 3: [pc=0x000003B9C25713F3] internal/main/run_main_module.js:17:47
+
+================================================================================
+==== Native Stack Trace ========================================================
+
+ 0: [pc=0x00007FF94C3B7640] nodereport::TriggerNodeReport [+0] in c:\users\default.laptop-6te6ar1e\coding\allin1ship\express-server\node_modules\node-report\src\node_report.cc: line: 196
+ 1: [pc=0x00007FF94C3BEF30] nodereport::OnUncaughtException [+0] in c:\users\default.laptop-6te6ar1e\coding\allin1ship\express-server\node_modules\node-report\src\module.cc: line: 184
+ 2: [pc=0x00007FF6CCF43A20] v8::internal::Isolate::CreateMessageOrAbort [+62]
+ 3: [pc=0x00007FF6CCF4AD10] v8::internal::Isolate::Throw [+654]
+ 4: [pc=0x00007FF6CCC3E1B0] v8::internal::interpreter::JumpTableTargetOffsets::iterator::operator= [+8991]
+ 5: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+463949]
+ 6: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+1011021]
+ 7: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+40498]
+ 8: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+40498]
+ 9: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+40498]
+10: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+40498]
+11: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+31470]
+12: [pc=0x00007FF6CD07DBD0] v8::internal::SetupIsolateDelegate::SetupHeap [+30428]
+13: [pc=0x00007FF6CCF552E0] v8::internal::Execution::CallWasm [+1657]
+14: [pc=0x00007FF6CCF55100] v8::internal::Execution::Call [+191]
+15: [pc=0x00007FF6CD040530] v8::Function::Call [+615]
+16: [pc=0x00007FF6CC7C07A0] napi_unref_threadsafe_function [+3278]
+17: [pc=0x00007FF6CC7C5090] node::Start [+1159]
+18: [pc=0x00007FF6CC7C5090] node::Start [+2177]
+19: [pc=0x00007FF6CC813D40] node::LoadEnvironment [+49]
+20: [pc=0x00007FF6CC74DF90] v8::internal::OrderedHashTable<v8::internal::OrderedHashSet,1>::NumberOfBucketsOffset [+9299]
+21: [pc=0x00007FF6CC7C5090] node::Start [+311]
+22: [pc=0x00007FF6CC5D3900] RC4_options [+339660]
+23: [pc=0x00007FF6CD5A5D40] v8::internal::compiler::RepresentationChanger::Uint32OverflowOperatorFor [+152748]
+24: [pc=0x00007FF982D77C10] BaseThreadInitThunk [+20]
+25: [pc=0x00007FF9835CD4B0] RtlUserThreadStart [+33]
+
+================================================================================
+==== JavaScript Heap and Garbage Collector =====================================
+
+Heap space name: read_only_space
+    Memory size: 151,552 bytes, committed memory: 151,552 bytes
+    Capacity: 150,392 bytes, used: 150,392 bytes, available: 0 bytes
+Heap space name: new_space
+    Memory size: 2,097,152 bytes, committed memory: 2,097,152 bytes
+    Capacity: 1,047,424 bytes, used: 829,160 bytes, available: 218,264 bytes
+Heap space name: old_space
+    Memory size: 1,458,176 bytes, committed memory: 1,458,176 bytes
+    Capacity: 1,219,584 bytes, used: 1,219,544 bytes, available: 40 bytes
+Heap space name: code_space
+    Memory size: 360,448 bytes, committed memory: 360,448 bytes
+    Capacity: 91,840 bytes, used: 91,840 bytes, available: 0 bytes
+Heap space name: map_space
+    Memory size: 266,240 bytes, committed memory: 266,240 bytes
+    Capacity: 244,800 bytes, used: 244,800 bytes, available: 0 bytes
+Heap space name: large_object_space
+    Memory size: 135,168 bytes, committed memory: 135,168 bytes
+    Capacity: 131,112 bytes, used: 131,112 bytes, available: 0 bytes
+Heap space name: code_large_object_space
+    Memory size: 0 bytes, committed memory: 0 bytes
+    Capacity: 0 bytes, used: 0 bytes, available: 0 bytes
+Heap space name: new_large_object_space
+    Memory size: 0 bytes, committed memory: 0 bytes
+    Capacity: 1,047,424 bytes, used: 0 bytes, available: 1,047,424 bytes
+
+Total heap memory size: 4,468,736 bytes
+Total heap committed memory: 4,468,736 bytes
+Total used heap memory: 2,666,848 bytes
+Total available heap memory: 2,194,612,288 bytes
+
+Heap memory limit: 2,197,815,296
+
+================================================================================
+==== Node.js libuv Handle Summary ==============================================
+
+(Flags: R=Ref, A=Active)
+Flags  Type      Address             Details
+[-A]   async     0000000251C537E280  
+[-A]   async     0000007FF6CFA81DD0  
+[--]   timer     0000000251C6BC5CD8  repeat: 0, timeout in: 364375007022 ms
+[-A]   check     0000000251C6BC5D78  
+[R-]   idle      0000000251C6BC5DF0  
+[-A]   async     0000000251C6BC5E68  
+[-A]   async     0000007FF6CFA81CA0  
+
+================================================================================
+==== System Information ========================================================
+
+Environment variables
+  ACLOCAL_PATH=/mingw64/share/aclocal:/usr/share/aclocal
+  ALLUSERSPROFILE=C:\ProgramData
+  APPDATA=C:\Users\default.LAPTOP-6TE6AR1E\AppData\Roaming
+  ChocolateyInstall=C:\ProgramData\chocolatey
+  ChocolateyLastPathUpdate=132489162108038618
+  CLASSPATH=C:\Program Files (x86)\QuickTime\QTSystem\QTJava.zip
+  COMMONPROGRAMFILES=C:\Program Files\Common Files
+  CommonProgramFiles(x86)=C:\Program Files (x86)\Common Files
+  CommonProgramW6432=C:\Program Files\Common Files
+  COMPUTERNAME=LAPTOP-21FCL9Q4
+  COMSPEC=C:\WINDOWS\system32\cmd.exe
+  CONFIG_SITE=/mingw64/etc/config.site
+  DISPLAY=needs-to-be-defined
+  DriverData=C:\Windows\System32\Drivers\DriverData
+  EXEPATH=C:\Program Files\Git
+  HOME=C:\Users\default.LAPTOP-6TE6AR1E
+  HOMEDRIVE=C:
+  HOMEPATH=\Users\default.LAPTOP-6TE6AR1E
+  HOSTNAME=LAPTOP-21FCL9Q4
+  INFOPATH=/usr/local/info:/usr/share/info:/usr/info:/share/info
+  LC_CTYPE=C.UTF-8
+  LOCALAPPDATA=C:\Users\default.LAPTOP-6TE6AR1E\AppData\Local
+  LOGONSERVER=\\LAPTOP-21FCL9Q4
+  MANPATH=/mingw64/local/man:/mingw64/share/man:/usr/local/man:/usr/share/man:/usr/man:/share/man
+  MINGW_CHOST=x86_64-w64-mingw32
+  MINGW_PACKAGE_PREFIX=mingw-w64-x86_64
+  MINGW_PREFIX=/mingw64
+  MSYSTEM=MINGW64
+  MSYSTEM_CARCH=x86_64
+  MSYSTEM_CHOST=x86_64-w64-mingw32
+  MSYSTEM_PREFIX=/mingw64
+  NUMBER_OF_PROCESSORS=8
+  OLDPWD=/c/Users/default.LAPTOP-6TE6AR1E/coding/allin1ship
+  OneDrive=C:\Users\default.LAPTOP-6TE6AR1E\OneDrive
+  OneDriveConsumer=C:\Users\default.LAPTOP-6TE6AR1E\OneDrive
+  ORIGINAL_PATH=C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\default.LAPTOP-6TE6AR1E\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Python39\Scripts;C:\Python39;C:\Program Files (x86)\Intel\iCLS Client;C:\Program Files\Intel\iCLS Client;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files\nodejs;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin;C:\Users\default.LAPTOP-6TE6AR1E\AppData\Local\Microsoft\WindowsApps;C:\Users\default.LAPTOP-6TE6AR1E\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\default.LAPTOP-6TE6AR1E\AppData\Roaming\npm;C:\Program Files\heroku\bin;C:\Program Files\PostgreSQL\13\bin
+  ORIGINAL_TEMP=/tmp
+  ORIGINAL_TMP=/tmp
+  OS=Windows_NT
+  PATH=C:\Users\default.LAPTOP-6TE6AR1E\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\default.LAPTOP-6TE6AR1E\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Python39\Scripts;C:\Python39;C:\Program Files (x86)\Intel\iCLS Client;C:\Program Files\Intel\iCLS Client;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\WiFi\bin;C:\Program Files\Common Files\Intel\WirelessCommon;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\QuickTime\QTSystem;C:\Program Files\nodejs;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\MySQL\MySQL Shell 8.0\bin;C:\Users\default.LAPTOP-6TE6AR1E\AppData\Local\Microsoft\WindowsApps;C:\Users\default.LAPTOP-6TE6AR1E\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\default.LAPTOP-6TE6AR1E\AppData\Roaming\npm;C:\Program Files\heroku\bin;C:\Program Files\PostgreSQL\13\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+  PATHEXT=.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.PYW
+  PGDATA=C:/Program Files/PostgreSQL/13/data
+  PGUSER=postgres
+  PKG_CONFIG_PATH=/mingw64/lib/pkgconfig:/mingw64/share/pkgconfig
+  PLINK_PROTOCOL=ssh
+  POSTGRES_DIR=C:/Program Files/PostgreSQL/13
+  PROCESSOR_ARCHITECTURE=AMD64
+  PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 142 Stepping 10, GenuineIntel
+  PROCESSOR_LEVEL=6
+  PROCESSOR_REVISION=8e0a
+  ProgramData=C:\ProgramData
+  PROGRAMFILES=C:\Program Files
+  ProgramFiles(x86)=C:\Program Files (x86)
+  ProgramW6432=C:\Program Files
+  PS1=\[\033]0;$TITLEPREFIX:$PWD\007\]\n\[\033[32m\]\u@\h \[\033[35m\]$MSYSTEM \[\033[33m\]\w\[\033[36m\]`__git_ps1`\[\033[0m\]\n$ 
+  PSModulePath=C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+  PUBLIC=C:\Users\Public
+  PWD=/c/Users/default.LAPTOP-6TE6AR1E/coding/allin1ship/express-server
+  QTJAVA=C:\Program Files (x86)\QuickTime\QTSystem\QTJava.zip
+  SESSIONNAME=Console
+  SHELL=C:\Program Files\Git\usr\bin\bash.exe
+  SHLVL=1
+  SSH_ASKPASS=/mingw64/libexec/git-core/git-gui--askpass
+  SYSTEMDRIVE=C:
+  SYSTEMROOT=C:\WINDOWS
+  TEMP=C:\Users\DEFAUL~1.LAP\AppData\Local\Temp
+  TERM_PROGRAM=mintty
+  TERM_PROGRAM_VERSION=3.4.2
+  TMP=C:\Users\DEFAUL~1.LAP\AppData\Local\Temp
+  TMPDIR=C:\Users\DEFAUL~1.LAP\AppData\Local\Temp
+  USERDOMAIN=LAPTOP-21FCL9Q4
+  USERDOMAIN_ROAMINGPROFILE=LAPTOP-21FCL9Q4
+  USERNAME=default
+  USERPROFILE=C:\Users\default.LAPTOP-6TE6AR1E
+  WINDIR=C:\WINDOWS
+  _=/usr/bin/winpty
+
+Loaded libraries
+  C:\Program Files\nodejs\node.exe
+  C:\WINDOWS\SYSTEM32\ntdll.dll
+  C:\WINDOWS\System32\KERNEL32.DLL
+  C:\WINDOWS\System32\KERNELBASE.dll
+  C:\WINDOWS\System32\WS2_32.dll
+  C:\WINDOWS\System32\RPCRT4.dll
+  C:\WINDOWS\System32\PSAPI.DLL
+  C:\WINDOWS\SYSTEM32\dbghelp.dll
+  C:\WINDOWS\System32\ADVAPI32.dll
+  C:\WINDOWS\System32\ucrtbase.dll
+  C:\WINDOWS\System32\msvcrt.dll
+  C:\WINDOWS\System32\sechost.dll
+  C:\WINDOWS\System32\USER32.dll
+  C:\WINDOWS\SYSTEM32\USERENV.dll
+  C:\WINDOWS\SYSTEM32\IPHLPAPI.DLL
+  C:\WINDOWS\System32\win32u.dll
+  C:\WINDOWS\System32\GDI32.dll
+  C:\WINDOWS\System32\profapi.dll
+  C:\WINDOWS\System32\gdi32full.dll
+  C:\WINDOWS\System32\msvcp_win.dll
+  C:\WINDOWS\System32\CRYPT32.dll
+  C:\WINDOWS\System32\MSASN1.dll
+  C:\WINDOWS\System32\bcrypt.dll
+  C:\WINDOWS\SYSTEM32\WINMM.dll
+  C:\WINDOWS\SYSTEM32\CRYPTBASE.DLL
+  C:\WINDOWS\System32\bcryptPrimitives.dll
+  C:\WINDOWS\SYSTEM32\WINMMBASE.dll
+  C:\WINDOWS\System32\cfgmgr32.dll
+  C:\WINDOWS\System32\IMM32.DLL
+  C:\WINDOWS\System32\powrprof.dll
+  C:\WINDOWS\System32\UMPDC.dll
+  C:\WINDOWS\system32\uxtheme.dll
+  C:\WINDOWS\System32\combase.dll
+  C:\WINDOWS\system32\mswsock.dll
+  C:\WINDOWS\System32\kernel.appcore.dll
+  \\?\C:\Users\default.LAPTOP-6TE6AR1E\coding\allin1ship\express-server\node_modules\node-report\api.node
+  C:\WINDOWS\SYSTEM32\NETAPI32.dll
+  C:\WINDOWS\SYSTEM32\SRVCLI.DLL
+  C:\WINDOWS\SYSTEM32\NETUTILS.DLL
+
+================================================================================

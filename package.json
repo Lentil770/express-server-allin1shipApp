@@ -21,7 +21,8 @@
     "express": "^4.17.1",
     "helmet": "^4.2.0",
     "morgan": "^1.10.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "node-report": "^2.2.11"
   },
   "devDependencies": {
     "chai": "^4.2.0",
