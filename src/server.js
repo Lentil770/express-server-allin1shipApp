@@ -85,19 +85,17 @@ app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
   VALUES (now(), "${req.params.driver}", ${req.params.stop_number});`
   db.query(sql, (err, result) => {
     if (err) {
-    //  console.log('error sending timestamp to db');
       throw err
     }
-    //console.log('timestamp successfully sent to db');
+    db.end()
     res.end()
   })
-  db.end();
 })
 
 
 app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
-  db.connect();
+  db.connect()
   //console.log('feedback received, sending to db', req.body);
   let sql = `INSERT INTO driver_feedback (feedback_date, driver, stop_number, feedback) 
   VALUES (now(), "${req.params.driver}", ${req.params.stop_number}, "${req.body.feedback}");`
@@ -109,7 +107,7 @@ app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
     //console.log('feedback successfully sent to db');
     res.json(req.body)
   })
-  db.end()
+  db.end();
 })
 
 process.on('uncaughtException', err => {
