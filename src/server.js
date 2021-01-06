@@ -87,9 +87,9 @@ app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
     if (err) {
       throw err
     }
-    db.end()
-    res.end()
+    res.send('timestamp sent')
   })
+  db.end();
 })
 
 
