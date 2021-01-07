@@ -77,7 +77,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
 app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  //console.log('timestamp received, sending to db');
+  console.log('timestamp received, sending to db', req.params);
   //this needs to receive drivers name, timestamp and date (and stop number?),
   //and add them to database
   
@@ -87,7 +87,7 @@ app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
     if (err) {
       throw err
     }
-    res.send('timestamp sent')
+    res.json(result)
   })
   db.end();
 })
