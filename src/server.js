@@ -166,6 +166,21 @@ app.get('/getDrivers', (req, res) => {
   db.end();
 })
 
+app.get('/getNumberRoutes', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `SELECT id FROM route_list`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 //GENERAL SERVER FUNCTIONS
 process.on('uncaughtException', err => {
   console.log(`Uncaught Exception: ${err.message}`)
