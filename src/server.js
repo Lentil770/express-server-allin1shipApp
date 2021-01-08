@@ -74,6 +74,9 @@ app.get('/getDailySchedule/:user', (req, res) => {
   db.end();
 })
 
+
+//ROUTINGAPP ENDPOINTS
+
 app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -110,6 +113,60 @@ app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
   db.end();
 })
 
+//ADMIN APP ENDPOINTS
+
+
+app.get('/singleRouteDisplay/:route_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('getting /singleRouteDisplay/:route_id');
+
+  let sql = `SELECT  stop_number, comments, address FROM
+  route_list JOIN stops ON stops.route_id = route_list.id
+  JOIN customers ON stops.customer_id = customers.customer_id
+  WHERE route_id = ${req.params.route_id}
+  ORDER BY stop_number;`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/getVehicles', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `SELECT DISTINCT vehicle FROM schedules`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/getDrivers', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `SELECT DISTINCT driver FROM schedules`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+//GENERAL SERVER FUNCTIONS
 process.on('uncaughtException', err => {
   console.log(`Uncaught Exception: ${err.message}`)
 })

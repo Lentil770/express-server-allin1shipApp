@@ -7,6 +7,20 @@
   FETCH LIST OF VEHICLES SOMEHOW (FETCH * FROM SCHEDULES WHERE COLUM = VEHICLE UNNIQUE)]
   FETCH ROUTE IDS AND THE STOP NUMBER, ADDRESS AND NOTES OF THAT ROUTE. (ASK ROY TO WRITE QUERY)
 
+SELECT DISTINCT driver FROM schedules;
+
+SELECT DISTINCT vehicle FROM schedules;
+CORRECT FROM ROY:
+SELECT  stop_number, comments, address FROM
+  route_list JOIN stops ON stops.route_id = route_list.id
+  JOIN customers ON stops.customer_id = customers.customer_id
+  WHERE route_id = ${req.params.route_id}
+  ORDER BY stop_number;
+
+what i thought might be:
+SELECT stop_number, comments, address FROM stops WHERE stops.route_id = ${req.params.route_id} 
+  JOIN customers ON stops.customer_id = customers.customer_id ORDER BY stop_number
+
 *ON SUBMIT SCHEDULE:
   PUSH DATE, DRIVER , VEHICLE, DROPPOFFINFO TEXT, ROUTE NUMBER AND (CHANGED NOTES FROM ROUTE TO DATABASE*) AS A SCHEDULE READY TO BE FETCHED BY APP.
   *NEED TO FIGURE OUT HOW TO UPDATE THE NOTES COLUMN ON SUBMIT IN ALREADY EXISTING ROUTE.
