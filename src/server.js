@@ -181,6 +181,22 @@ app.get('/getNumberRoutes', (req, res) => {
   db.end();
 })
 
+app.post('/postSchedule', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `INSERT INTO schedules(schedule_date, driver, vehicle, dropoff_info, route_id)
+    VALUES (${req.body.selectedDate}, '${req.body.selectedDriver}', '${req.body.selectedVehicle}', '${req.body.selectedDropOffInfo}', ${req.body.selectedRoute})`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 //GENERAL SERVER FUNCTIONS
 process.on('uncaughtException', err => {
   console.log(`Uncaught Exception: ${err.message}`)
