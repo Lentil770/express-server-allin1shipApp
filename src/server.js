@@ -184,9 +184,88 @@ app.get('/getNumberRoutes', (req, res) => {
 app.post('/postSchedule', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
-
+  console.log(req.body);
   let sql = `INSERT INTO schedules(schedule_date, driver, vehicle, dropoff_info, route_id)
-    VALUES (${req.body.selectedDate}, '${req.body.selectedDriver}', '${req.body.selectedVehicle}', '${req.body.selectedDropOffInfo}', ${req.body.selectedRoute})`;
+    VALUES ('${req.body.selectedDate}', '${req.body.selectedDriver}', '${req.body.selectedVehicle}', '${req.body.selectedDropOffInfo}', ${req.body.selectedRoute})`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.post('/postChangedComments/:route_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `UPDATE stops SET notes='${req.body.comment}' WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/getCustomersData', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT customer_id, customer_name FROM customers;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/getRouteLength', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT COUNT(*) FROM route_list;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/createNewRouteList', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `INSERT INTO route_list()
+  VALUES ();`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.post('/postNewRoute', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+//can i get customer_id? or should i get address and find id in sql?
+  let sql = `INSERT INTO stops (route_id, stop_number, customer_id, notes)
+  VALUES (${req.body.route_id}, ${req.body.stop_number}, ${req.body.customer_id}, '${req.body.notes}');`
 
   db.query(sql, (err, result) => {
     if (err) {
