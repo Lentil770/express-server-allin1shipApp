@@ -45,6 +45,8 @@ app.get('/getcustomerslist', (req, res) => {
 
 //need to figure out why crashing on load etc...
 
+//distinct solves issue of multiple identical stops/routes, but does not solve there being multiple DIFFERENT stops/rotues. 
+//POSSIBLE SOLUTION (ask roy for actual best way) admin app CHANGE route dont just add new
 
 app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
@@ -55,7 +57,8 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
 
-  let sql = `SELECT schedules.vehicle, schedules.driver, schedules.dropoff_info, stops.id,  stops.stop_number, stops.customer_id, customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments 
+  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, stops.id, stops.stop_number, stops.STOP_NUMBER,
+    stops.customer_id, customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments 
     FROM schedules JOIN route_list
     ON schedules.route_id = route_list.id
     JOIN stops ON stops.route_id = route_list.id
@@ -243,13 +246,13 @@ app.get('/getRouteLength', (req, res) => {
   db.end();
 })
 
-app.get('/createNewRouteList', (req, res) => {
+app.get('/createNewRouteList/:newRouteListName', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
 
-  let sql = `INSERT INTO route_list()
-  VALUES ();`;
+  let sql = `INSERT INTO route_list(route_name)
+  VALUES (${this.params.newRouteListName});`;
   db.query(sql, (err, result) => {
     if (err) {
       throw err
