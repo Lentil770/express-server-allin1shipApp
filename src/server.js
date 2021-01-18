@@ -300,8 +300,8 @@ app.post('/postNewCustomer', (req, res) => {
   db.connect();
   console.log(req.body);
 //can i get customer_id? or should i get address and find id in sql?
-  let sql = `INSERT INTO customers (customer_name, address, location, contact_name, contact_number, comments)
-  VALUES (${req.body.customer_name}, ${req.body.address}, ${req.body.location}, '${req.body.contact_name}, '${req.body.contact_number}', '${req.body.contact_comments});`
+  let sql = `INSERT INTO customers (customer_name, address, location, contact_name, contact_number, comments, active)
+  VALUES ('${req.body.customer_name}', '${req.body.address}', '${req.body.location}', '${req.body.contact_name}', ${req.body.contact_number}, '${req.body.comments}', 1);`
 
   db.query(sql, (err, result) => {
     if (err) {
