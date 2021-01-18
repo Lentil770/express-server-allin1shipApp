@@ -57,7 +57,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
 
-  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, stops.id, stops.stop_number, stops.STOP_NUMBER,
+  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, stops.id, stops.stop_number, stops.notes,
     stops.customer_id, customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments 
     FROM schedules JOIN route_list
     ON schedules.route_id = route_list.id
@@ -98,6 +98,22 @@ app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
   db.end();
 })
 
+app.get('/sendStartTime/:driver', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('start time received, sending to db', req.params);
+  
+  let sql = `INSERT INTO start_times (driver) 
+  VALUES ("${req.params.driver}");`
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 
 app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
@@ -124,7 +140,7 @@ app.get('/singleRouteDisplay/:route_id', (req, res) => {
   db.connect();
   console.log('getting /singleRouteDisplay/:route_id');
 
-  let sql = `SELECT  stop_number, comments, address FROM
+  let sql = `SELECT  stop_number, notes, address FROM
   route_list JOIN stops ON stops.route_id = route_list.id
   JOIN customers ON stops.customer_id = customers.customer_id
   WHERE route_id = ${req.params.route_id}
