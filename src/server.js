@@ -295,6 +295,24 @@ app.post('/postNewRoute', (req, res) => {
   db.end();
 })
 
+//DISPLAY FEEDBACK ENDPOINTS
+
+app.get('/getFeedbackData/:driver', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT feedback_date, stop_number, feedback FROM driver_feedback WHERE driver='${req.params.driver}';`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+
 //GENERAL SERVER FUNCTIONS
 process.on('uncaughtException', err => {
   console.log(`Uncaught Exception: ${err.message}`)
