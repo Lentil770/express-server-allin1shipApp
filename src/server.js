@@ -295,6 +295,24 @@ app.post('/postNewRoute', (req, res) => {
   db.end();
 })
 
+app.post('/postNewCustomer', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+//can i get customer_id? or should i get address and find id in sql?
+  let sql = `INSERT INTO customers (customer_name, address, location, contact_name, contact_number, comments)
+  VALUES (${req.body.customer_name}, ${req.body.address}, ${req.body.location}, '${req.body.contact_name}, '${req.body.contact_number}', '${req.body.contact_comments});`
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+
 //DISPLAY FEEDBACK ENDPOINTS
 
 app.get('/getFeedbackData/:driver', (req, res) => {
