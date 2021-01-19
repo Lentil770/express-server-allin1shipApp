@@ -267,8 +267,8 @@ app.get('/createNewRouteList/:newRouteListName', (req, res) => {
   db.connect();
   console.log(req.body);
 
-  let sql = `INSERT INTO route_list(route_name)
-  VALUES (${this.params.newRouteListName});`;
+  let sql = `INSERT INTO route_list (route_name)
+  VALUES ('${req.params.newRouteListName}');`
   db.query(sql, (err, result) => {
     if (err) {
       throw err
@@ -307,6 +307,7 @@ app.post('/postNewCustomer', (req, res) => {
     if (err) {
       throw err
     }
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(result)
   })
   db.end();
