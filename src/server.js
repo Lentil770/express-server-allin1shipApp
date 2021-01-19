@@ -189,7 +189,7 @@ app.get('/getNumberRoutes', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `SELECT id FROM route_list`;
+  let sql = `SELECT id, route_name FROM route_list`;
 
   db.query(sql, (err, result) => {
     if (err) {
