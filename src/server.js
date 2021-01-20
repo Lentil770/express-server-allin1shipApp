@@ -8,7 +8,7 @@ const dbInfo = {
   host : process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: 'allinhip_app'
+  database: 'allinoy4_app'
 }
 
 //db.connect()
@@ -232,6 +232,22 @@ app.post('/postChangedComments/:route_id', (req, res) => {
   db.end();
 })
 
+app.post('/postStopChanges/:route_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `UPDATE stops SET notes='${req.body.notes}', stop_number=${req.body.stop_number}, customer_id=${req.body.customer_id} WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 app.get('/getCustomersData', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -261,6 +277,37 @@ app.get('/getRouteLength', (req, res) => {
   })
   db.end();
 })
+
+app.get('/getCustomersData', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT customer_id, customer_name FROM customers;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/getRouteLength', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT COUNT(*) FROM route_list;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 
 app.get('/createNewRouteList/:newRouteListName', (req, res) => {
   const db = mysql.createConnection(dbInfo)
