@@ -19,9 +19,10 @@ db.on('end', () => console.log('mysql db connection ended.'))
 
 
 app.get('/getcustomerslist', (req, res) => {
+  console.log('lentil getting /getcustomerslist');
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  //console.log('getting /getcustomerslist');
+  console.log('connected to db');
   let sql = 'SELECT * FROM customers';
   db.query(sql, (err, result) => {
     if (err) {
@@ -378,6 +379,38 @@ app.get('/getFeedbackData/:driver', (req, res) => {
   db.end();
 })
 
+
+//fetches id, start_time and driver from start_times. (add date filter to get the days starts? maybe unnecasary.)
+app.get('/getStartTimesData/:driver', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT * FROM start_times WHERE driver='${req.params.driver}';`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+//fetches daily stop timestamps for driver(add date filter to get the days starts?)
+app.get('/getTimestampsData/:driver', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT time_completed, driver, stop_number FROM timestamps WHERE driver='${req.params.driver}';`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
 
 //GENERAL SERVER FUNCTIONS
 process.on('uncaughtException', err => {
