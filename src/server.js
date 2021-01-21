@@ -156,6 +156,25 @@ app.get('/singleRouteDisplay/:route_id', (req, res) => {
   db.end();
 })
 
+
+app.get('/singleScheduleDisplay/:driver', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('getting /singleScheduleDisplay/:driver');
+
+  let sql = `SELECT * FROM
+  schedules WHERE driver=${req.params.driver};
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 app.get('/getVehicles', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -239,6 +258,22 @@ app.post('/postStopChanges/:route_id', (req, res) => {
   console.log(req.body);
 
   let sql = `UPDATE stops SET notes='${req.body.notes}', stop_number=${req.body.stop_number}, customer_id=${req.body.customer_id} WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.post('/postScheduleChanges/:schedule_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `UPDATE schedules SET schedule_date='${req.body.schedule_date}', driver=${req.body.driver}, vehicle=${req.body.vehicle} dropoff_info=${req.body.dropoff_info} WHERE driver=${req.params.driver} AND schedule_date=${req.params.schedule_date}`;
 
   db.query(sql, (err, result) => {
     if (err) {
