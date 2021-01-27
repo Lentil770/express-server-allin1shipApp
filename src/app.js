@@ -7,6 +7,9 @@ const { NODE_ENV } = require('./config')
 
 const app = express()
 
+var Moment = require('moment-timezone');
+Moment().tz('America/New_York').format();
+
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
@@ -16,8 +19,10 @@ app.use(helmet())
 app.use(cors())
 app.use(express.json())
 
+
+
 app.get('/', (req, res) => {
-  res.send('Hello, world!')
+  res.send(Date())
 })
 
 app.use(function errorHandler(error, req, res, next) {
@@ -29,6 +34,7 @@ app.use(function errorHandler(error, req, res, next) {
     response = { message: error.message, error }
   }
   res.status(500).json(response)
-  })
+})
+
 
 module.exports = app

@@ -49,6 +49,40 @@ app.get('/getcustomerslist', (req, res) => {
 //distinct solves issue of multiple identical stops/routes, but does not solve there being multiple DIFFERENT stops/rotues. 
 //POSSIBLE SOLUTION (ask roy for actual best way) admin app CHANGE route dont just add new
 
+/* for new multiple notes
+let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, stops.id, stops.stop_number,
+    stops.customer_id, customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments,
+    notes.* 
+    FROM schedules JOIN route_list
+    ON schedules.route_id = route_list.id
+    JOIN stops ON stops.route_id = route_list.id
+    JOIN customers on stops.customer_id = customers.customer_id
+    JOIN stop_tasks on stop_tasks.stop_id = stops.id
+    WHERE schedule_date BETWEEN '${todaysDate}' AND '${tomorrowsDate}' AND driver = '${driver}'
+    ORDER BY stop_number;`;
+*/
+
+app.get('/getDailyTasks/:stop_id', (req, res) => {
+  /*
+  in app, for each stop id query database with it. this finc fetches its stops and returns them
+  WORKS IN POSTMAN:)
+  */
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `SELECT * FROM stop_tasks WHERE stop_id = ${req.params.stop_id};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+    //  console.log('error in db.query of /getdailyschedule/:user');
+      throw err
+    }
+    //console.log('got db.query of getdailyschedule/user. result:')
+    res.json(result)
+  })
+  db.end();
+})
+
 app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -64,8 +98,10 @@ app.get('/getDailySchedule/:user', (req, res) => {
     ON schedules.route_id = route_list.id
     JOIN stops ON stops.route_id = route_list.id
     JOIN customers on stops.customer_id = customers.customer_id
-    WHERE schedule_date BETWEEN '${todaysDate}' AND '${tomorrowsDate}' AND driver = '${driver}'
+    WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
     ORDER BY stop_number;`;
+
+    //    WHERE schedule_date BETWEEN '${todaysDate}' AND '${tomorrowsDate}' AND driver = '${driver}'
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -80,6 +116,12 @@ app.get('/getDailySchedule/:user', (req, res) => {
 
 
 //ROUTINGAPP ENDPOINTS
+
+app.get('/getFeedbackOptions', (req, res) => {
+  console.log('getfeedback options is running');
+  const feedBackOptions = ['No papers.', 'Customer made me wait over 5 minutes.', 'Complete but no bags.', 'No feedback']
+  res.json(feedBackOptions);
+})
 
 app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
@@ -133,6 +175,36 @@ app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
   db.end();
 })
 
+app.post('/sendTaskCompletion/:stop_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect()
+  //console.log('feedback received, sending to db', req.body);
+  let sql1 = `
+  UPDATE stop_tasks SET time_completed=CURRENT_TIMESTAMP() WHERE stop_id=${req.params.stop_id} AND task='${req.body.task}';
+  `
+  let sql2 = `
+  UPDATE stop_tasks SET complete=1 WHERE stop_id=${req.params.stop_id} AND task='${req.body.task}';`
+
+  db.query(sql1, (err, result) => {
+    if (err) {
+    //  console.log('error sending feedback to db');
+      throw err
+    }
+    //console.log('feedback successfully sent to db');
+    res.json(req.body)
+  })
+  db.query(sql2, (err, result) => {
+    if (err) {
+    //  console.log('error sending feedback to db');
+      throw err
+    }
+    //console.log('feedback successfully sent to db');
+    res.json(req.body)
+  })
+  db.end();
+})
+
+
 //ADMIN APP ENDPOINTS
 
 
@@ -163,7 +235,7 @@ app.get('/singleScheduleDisplay/:driver', (req, res) => {
   console.log('getting /singleScheduleDisplay/:driver');
 
   let sql = `SELECT * FROM
-  schedules WHERE driver=${req.params.driver};
+  schedules WHERE driver=${req.params.driver} AND DATE(schedule_date)= CURDATE();
   `;
 
   db.query(sql, (err, result) => {
@@ -225,7 +297,7 @@ app.post('/postSchedule', (req, res) => {
   db.connect();
   console.log(req.body);
   let sql = `INSERT INTO schedules(schedule_date, driver, vehicle, dropoff_info, route_id)
-    VALUES ('${req.body.selectedDate}', '${req.body.selectedDriver}', '${req.body.selectedVehicle}', '${req.body.selectedDropOffInfo}', ${req.body.selectedRoute})`;
+    VALUES ('${req.body.selectedDate} 03:00:00', '${req.body.selectedDriver}', '${req.body.selectedVehicle}', '${req.body.selectedDropOffInfo}', ${req.body.selectedRoute})`;
 
   db.query(sql, (err, result) => {
     if (err) {
