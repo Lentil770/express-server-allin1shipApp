@@ -296,7 +296,7 @@ app.post('/postSchedule', (req, res) => {
   db.connect();
   console.log(req.body);
   let sql = `INSERT INTO schedules(schedule_date, driver, vehicle, dropoff_info, route_id)
-    VALUES ('${req.body.selectedDate} 03:00:00', '${req.body.selectedDriver}', '${req.body.selectedVehicle}', '${req.body.selectedDropOffInfo}', ${req.body.selectedRoute})`;
+    VALUES ('${req.body.selectedDate} 08:00:00', '${req.body.selectedDriver}', '${req.body.selectedVehicle}', '${req.body.selectedDropOffInfo}', ${req.body.selectedRoute})`;
 
   db.query(sql, (err, result) => {
     if (err) {
