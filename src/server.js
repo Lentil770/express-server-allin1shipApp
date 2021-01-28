@@ -83,6 +83,8 @@ app.get('/getDailyTasks/:stop_id', (req, res) => {
   db.end();
 })
 
+//ROUTINGAPP ENDPOINTS
+
 app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -114,7 +116,6 @@ app.get('/getDailySchedule/:user', (req, res) => {
 })
 
 
-//ROUTINGAPP ENDPOINTS
 
 app.get('/getFeedbackOptions', (req, res) => {
   console.log('getfeedback options is running');
@@ -212,7 +213,7 @@ app.get('/singleRouteDisplay/:route_id', (req, res) => {
   db.connect();
   console.log('getting /singleRouteDisplay/:route_id');
 
-  let sql = `SELECT  stop_number, notes, address, customer_name FROM
+  let sql = `SELECT  stop_number, notes, address, customer_name, customer_id FROM
   route_list JOIN stops ON stops.route_id = route_list.id
   JOIN customers ON stops.customer_id = customers.customer_id
   WHERE route_id = ${req.params.route_id}
@@ -305,6 +306,14 @@ app.post('/postSchedule', (req, res) => {
     res.json(result)
   })
   db.end();
+})
+
+app.post('/postScheduleStops', (req, res) => {
+  res.send('postScheduleStops ran away!')
+})
+
+app.post('/postStopTask/:scheduleStopId', (req, res) => {
+  res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
 })
 
 app.post('/postChangedComments/:route_id', (req, res) => {
