@@ -322,7 +322,7 @@ app.post('/postScheduleStops', (req, res) => {
     if (err) {
       throw err
     }
-    res.json(result)
+    res.json(result.insertId)
   })
   db.end();
 })
