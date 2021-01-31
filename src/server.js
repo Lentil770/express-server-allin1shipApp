@@ -62,6 +62,9 @@ let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropof
     ORDER BY stop_number;`;
 */
 
+//ROUTINGAPP ENDPOINTS
+
+
 app.get('/getDailyTasks/:stop_id', (req, res) => {
   /*
   in app, for each stop id query database with it. this finc fetches its stops and returns them
@@ -83,7 +86,6 @@ app.get('/getDailyTasks/:stop_id', (req, res) => {
   db.end();
 })
 
-//ROUTINGAPP ENDPOINTS
 
 app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
@@ -93,14 +95,15 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
 
-  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, stops.id, stops.stop_number, stops.notes,
-    stops.customer_id, customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments 
-    FROM schedules JOIN route_list
-    ON schedules.route_id = route_list.id
-    JOIN stops ON stops.route_id = route_list.id
-    JOIN customers on stops.customer_id = customers.customer_id
-    WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
-    ORDER BY stop_number;`;
+  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, schedule_stop_table.stop_number,
+  schedule_stop_tasks.task, customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments
+      FROM schedules JOIN schedule_stop_table ON schedules.id = schedule_stop_table.schedule_id
+      JOIN schedule_stop_tasks ON schedule_stop_table.schedule_stop_id = schedule_stop_tasks.schedule_stop_id
+      JOIN route_list ON schedules.route_id = route_list.id
+      JOIN stops ON stops.route_id = route_list.id
+      JOIN customers on stops.customer_id = customers.customer_id
+      WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
+      ORDER BY stop_number;`;
 
     //    WHERE schedule_date BETWEEN '${todaysDate}' AND '${tomorrowsDate}' AND driver = '${driver}'
 
@@ -309,11 +312,36 @@ app.post('/postSchedule', (req, res) => {
 })
 
 app.post('/postScheduleStops', (req, res) => {
-  res.send('postScheduleStops ran away!')
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  let sql = `INSERT INTO schedule_stop_table(schedule_id, customer_id, stop_number)
+    VALUES (${req.body.scheduleId}, ${req.body.customerId}, ${req.body.stopNumber});
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
 })
 
 app.post('/postStopTask/:scheduleStopId', (req, res) => {
   res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  let sql = `INSERT INTO schedule_stop_tasks(schedule_stop_id, task)
+    VALUES (${req.params}, ${req.body.customerId}, ${req.body.stopNumber});
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
 })
 
 app.post('/postChangedComments/:route_id', (req, res) => {
@@ -385,6 +413,21 @@ app.get('/getRouteLength', (req, res) => {
   console.log(req.body);
 
   let sql = `SELECT COUNT(*) FROM route_list;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/getNumberSchedules', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT COUNT(*) FROM schedules;`;
   db.query(sql, (err, result) => {
     if (err) {
       throw err
