@@ -344,6 +344,21 @@ app.post('/postStopTask/:scheduleStopId', (req, res) => {
   db.end();
 })
 
+app.post('/alterSchedule/:schedule_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body); 
+  let sql = `UPDATE schedules SET schedule_date='${req.body.selectedDate} 08:00:00', driver='${req.body.selectedDriver}', vehicle='${req.body.selectedVehicle}', dropoff_info='${req.body.selectedDropOffInfo}', route_id=${req.body.selectedDefaultRoute}
+  WHERE schedules.id=${req.params.schedule_id}`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 app.post('/postChangedComments/:route_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
