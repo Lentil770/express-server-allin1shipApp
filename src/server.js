@@ -328,12 +328,12 @@ app.post('/postScheduleStops', (req, res) => {
 })
 
 app.post('/postStopTask/:scheduleStopId', (req, res) => {
-  res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
+  //res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
   let sql = `INSERT INTO schedule_stop_tasks(schedule_stop_id, task)
-    VALUES (${req.params}, ${req.body.customerId}, ${req.body.stopNumber});
+    VALUES (${req.params.scheduleStopId}, '${req.body.task}');
   `
   db.query(sql, (err, result) => {
     if (err) {
