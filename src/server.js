@@ -95,7 +95,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
 
-  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, schedule_stop_table.stop_number,
+  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number,
     customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments
     FROM schedules JOIN route_list
     ON schedules.route_id = route_list.id
