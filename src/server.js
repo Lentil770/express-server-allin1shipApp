@@ -618,6 +618,32 @@ app.post('/postNewCustomer', (req, res) => {
 
 //DISPLAY FEEDBACK ENDPOINTS
 
+app.get('/getCurrentRouteDetails/:driver', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  const today = new Date()
+  const todaysDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
+  const { driver } = req.params;
+
+  let sql = `SELECT schedules.vehicle, schedules.dropoff_info, route_list.route_name, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.feedback, schedule_stop_table.completion_status, 
+  schedule_stop_table.number_packages, schedule_stop_table.check_in_time, schedule_stop_table.check_out_time, customers.customer_name FROM
+  schedules JOIN route_list ON route_list.id = schedules.route_id
+  JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
+  JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
+  WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
+  ORDER BY stop_number;`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+
 app.get('/getFeedbackData/:driver', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
