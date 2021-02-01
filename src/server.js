@@ -73,7 +73,7 @@ app.get('/getDailyTasks/:schedule_stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `SELECT * FROM schedule_stop_tasks WHERE schedule_stop_id = ${req.params.schedule_stop_id};`;
+  let sql = `SELECT * FROM schedule_stop_tasks WHERE schedule_stop_id = ${req.params.schedule_stop_id} ORDER BY schedule_stop_id;`;
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -160,6 +160,37 @@ app.get('/sendStartTime/:driver', (req, res) => {
   db.end();
 })
 
+app.get('/markTaskComplete/:task_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('task recieved, sending to db', req.params);
+  
+  let sql = `UPDATE schedule_stop_tasks SET completion_status='complete' WHERE schedule_stop_tasks.task_id=${req.params.task_id};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/sendPackageNumber/:stop_id/:package_number', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('package number received, sending to db', req.params);
+  
+  let sql = `UPDATE schedule_stop_table SET number_packages='${req.params.package_number}' WHERE schedule_stop_table.schedule_stop_id=${req.params.stop_id};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
 
 app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
