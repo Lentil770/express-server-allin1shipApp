@@ -227,7 +227,7 @@ app.post('/sendFeedback/:sched_stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect()
   //console.log('feedback received, sending to db', req.body);
-  let sql = `UPDATE schedule_stop_table SET feedback='${req.body.feedback}' WHERE schedule_stop_table.schedule_stop_id=${req.params.stop_id};`
+  let sql = `UPDATE schedule_stop_table SET feedback='${req.body.feedback}' WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
     //  console.log('error sending feedback to db');
