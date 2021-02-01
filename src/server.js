@@ -207,6 +207,21 @@ app.get('/sendPackageNumber/:stop_id/:package_number', (req, res) => {
   })
   db.end();
 })
+app.get('/markCompletionStatus/:stop_id/', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('completion received, sending to db', req.params);
+  
+  let sql = `UPDATE schedule_stop_table SET completion_status='complete' WHERE schedule_stop_table.schedule_stop_id=${req.params.stop_id};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
 
 app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
