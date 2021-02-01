@@ -292,6 +292,26 @@ app.get('/singleRouteDisplay/:route_id', (req, res) => {
   db.end();
 })
 
+app.get('/getRouteTasks/:stop_id', (req, res) => {
+  /*
+  in app, for each stop id query database with it. this finc fetches its stops and returns them
+  WORKS IN POSTMAN:)
+  */
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `SELECT * FROM default_stop_tasks WHERE stop_id = ${req.params.stop_id} ORDER BY stop_id;`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+    //  console.log('error in db.query of /getdailyschedule/:user');
+      throw err
+    }
+    //console.log('got db.query of getdailyschedule/user. result:')
+    res.json(result)
+  })
+  db.end();
+})
 
 app.get('/singleScheduleDisplay/:driver', (req, res) => {
   const db = mysql.createConnection(dbInfo)
