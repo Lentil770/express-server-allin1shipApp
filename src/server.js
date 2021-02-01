@@ -181,7 +181,7 @@ app.get('/markTaskIncomplete/:task_id', (req, res) => {
   db.connect();
   console.log('task received, sending to db', req.params);
   
-  let sql = `UPDATE schedule_stop_tasks SET completion_status='complete' WHERE schedule_stop_tasks.task_id=${req.params.task_id};`;
+  let sql = `UPDATE schedule_stop_tasks SET completion_status='incomplete' WHERE schedule_stop_tasks.task_id=${req.params.task_id};`;
 
   db.query(sql, (err, result) => {
     if (err) {
