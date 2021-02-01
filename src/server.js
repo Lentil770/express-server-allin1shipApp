@@ -126,15 +126,16 @@ app.get('/getFeedbackOptions', (req, res) => {
   res.json(feedBackOptions);
 })
 
-app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
+app.get('/sendTimestamp/:sched_stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('timestamp received, sending to db', req.params);
   //this needs to receive drivers name, timestamp and date (and stop number?),
   //and add them to database
   
-  let sql = `INSERT INTO timestamps (time_completed, driver, stop_number) 
-  VALUES (now(), "${req.params.driver}", ${req.params.stop_number});`
+  let sql = `UPDATE schedule_stop_table SET check_out_time=now() WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
+  /*INSERT INTO timestamps (time_completed, driver, stop_number) 
+  VALUES (now(), "${req.params.driver}", ${req.params.stop_number});`*/
   db.query(sql, (err, result) => {
     if (err) {
       throw err
@@ -144,13 +145,12 @@ app.get('/sendTimestamp/:driver/:stop_number', (req, res) => {
   db.end();
 })
 
-app.get('/sendStartTime/:driver', (req, res) => {
+app.get('/sendStartTime/:sched_stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('start time received, sending to db', req.params);
   
-  let sql = `INSERT INTO start_times (driver) 
-  VALUES ("${req.params.driver}");`
+  let sql = `UPDATE schedule_stop_table SET check_in_time=now() WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
       throw err
@@ -223,12 +223,11 @@ app.get('/markCompletionStatus/:stop_id/', (req, res) => {
   db.end();
 })
 
-app.post('/sendFeedback/:driver/:stop_number', (req, res) => {
+app.post('/sendFeedback/:sched_stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect()
   //console.log('feedback received, sending to db', req.body);
-  let sql = `INSERT INTO driver_feedback (feedback_date, driver, stop_number, feedback) 
-  VALUES (now(), "${req.params.driver}", ${req.params.stop_number}, "${req.body.feedback}");`
+  let sql = `UPDATE schedule_stop_table SET feedback='${req.body.feedback}' WHERE schedule_stop_table.schedule_stop_id=${req.params.stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
     //  console.log('error sending feedback to db');
