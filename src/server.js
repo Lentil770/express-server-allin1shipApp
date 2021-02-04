@@ -97,11 +97,9 @@ app.get('/getDailySchedule/:user', (req, res) => {
 
   let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number,
     customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments
-    FROM schedules JOIN route_list
-    ON schedules.route_id = route_list.id
-    JOIN stops ON stops.route_id = route_list.id
+    FROM schedules 
+    JOIN schedule_stop_table ON (schedule_stop_table.schedule_id) = (schedules.id)
     JOIN customers on stops.customer_id = customers.customer_id
-    JOIN schedule_stop_table ON (schedule_stop_table.schedule_id, schedule_stop_table.stop_number) = (schedules.id, stops.stop_number)
     WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
     ORDER BY stop_number;`;
 
