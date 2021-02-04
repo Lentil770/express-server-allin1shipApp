@@ -428,6 +428,39 @@ app.post('/postStopTask/:scheduleStopId', (req, res) => {
   db.end();
 })
 
+app.post('/alterStopTask/:scheduleStopId', (req, res) => {
+  //res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  let sql = `INSERT INTO schedule_stop_tasks(schedule_stop_id, task)
+    VALUES (${req.params.scheduleStopId}, '${req.body.task}');
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.post('/alterScheduleStops', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  let sql = `UPDATE schedule_stop_table SET customer_id=${req.body.customerId}
+    WHERE schedule_id=${req.body.scheduleId} AND stop_number=${req.body.stopNumber};
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result.insertId)
+  })
+  db.end();
+})
+
 app.post('/alterSchedule/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
