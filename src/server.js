@@ -268,16 +268,23 @@ app.post('/sendTaskCompletion/:stop_id', (req, res) => {
 //ADMIN APP ENDPOINTS
 
 
-app.get('/singleRouteDisplay/:route_id', (req, res) => {
+app.get('/singleRouteDisplay/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('getting /singleRouteDisplay/:route_id');
 
+  let sql =  `SELECT schedule_stop_table.schedule_stop_id, customer_id, stop_number, customers.customer_id, customers.address, customers.customer_name
+    FROM schedule_stop_table 
+    JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
+    WHERE schedule_id = ${req.params.schedule_id}
+    ORDER BY stop_number;`;
+/*
   let sql = `SELECT  stops.id, stop_number, notes, address, customer_name, customers.customer_id FROM
   route_list JOIN stops ON stops.route_id = route_list.id
   JOIN customers ON stops.customer_id = customers.customer_id
   WHERE route_id = ${req.params.route_id}
   ORDER BY stop_number;`;
+*/
 
   db.query(sql, (err, result) => {
     if (err) {
