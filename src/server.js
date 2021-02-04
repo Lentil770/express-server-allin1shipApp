@@ -428,12 +428,27 @@ app.post('/postStopTask/:scheduleStopId', (req, res) => {
   db.end();
 })
 
+app.get('/deleteStopsTasks/:scheduleStopId', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  let sql = `
+  DELETE FROM schedule_stop_tasks WHERE schedule_stop_id=${req.params.scheduleStopId};
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
 app.post('/alterStopTask/:scheduleStopId', (req, res) => {
   //res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
-  let sql = `INSERT INTO schedule_stop_tasks(schedule_stop_id, task)
+  let sql = `
+  INSERT INTO schedule_stop_tasks(schedule_stop_id, task)
     VALUES (${req.params.scheduleStopId}, '${req.body.task}');
   `
   db.query(sql, (err, result) => {
