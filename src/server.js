@@ -273,7 +273,7 @@ app.get('/singleRouteDisplay/:schedule_id', (req, res) => {
   db.connect();
   console.log('getting /singleRouteDisplay/:route_id');
 
-  let sql =  `SELECT schedule_stop_table.schedule_stop_id, customer_id, stop_number, customers.customer_id, customers.address, customers.customer_name
+  let sql =  `SELECT schedule_stop_table.schedule_stop_id, schedule_stop_table.customer_id, schedule_stop_table.stop_number, customers.customer_id, customers.address, customers.customer_name
     FROM schedule_stop_table 
     JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
     WHERE schedule_id = ${req.params.schedule_id}
