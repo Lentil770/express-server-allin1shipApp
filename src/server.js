@@ -303,7 +303,7 @@ app.get('/getRouteTasks/:stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `SELECT * FROM default_stop_tasks WHERE stop_id = ${req.params.stop_id} ORDER BY stop_id;`;
+  let sql = `SELECT * FROM schedule_stop_tasks WHERE schedule_stop_id = ${req.params.stop_id} ORDER BY schedule_stop_id;`;
 
   db.query(sql, (err, result) => {
     if (err) {
