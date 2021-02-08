@@ -348,7 +348,7 @@ app.get('/singleScheduleDisplay/:driver', (req, res) => {
   console.log('getting /singleScheduleDisplay/:driver');
 
   let sql = `SELECT * FROM
-  schedules WHERE driver=${req.params.driver} AND DATE(schedule_date)= CURDATE();
+  schedules WHERE driver='${req.params.driver}' AND DATE(schedule_date)= CURDATE();
   `;
 
   db.query(sql, (err, result) => {
