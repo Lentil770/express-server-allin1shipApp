@@ -33,11 +33,11 @@ app.get('/getPlatforms', (req, res) => {
 })
 
 
-app.post('/testSendData/:platform', (req, res) => {
+app.post('/testSendData', (req, res) => {
   
-  console.log(req.params.platform, req.body);
+  console.log(req.body.platform, req.body.shipments);
 
-  res.json(req.body)
+  res.send('testsenddata endpoint')
 })
 
 //ROUTINGAPP ENDPOINTS
