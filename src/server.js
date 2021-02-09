@@ -17,8 +17,6 @@ db.on('connect', () => console.log('connected to mysql db'));
 db.on('end', () => console.log('mysql db connection ended.'))
 */
 
-//MANIFEST SITE ENDPOINTS 
-//idealy will be put in their own server 
 
 app.get('/getPlatforms', (req, res) => {
   const db = mysql.createConnection(dbInfo)
@@ -39,7 +37,7 @@ app.post('/testSendData/:platform', (req, res) => {
   
   console.log(req.params.platform, req.body);
 
-  res.send('testSendData endpoint')
+  res.json(req.body)
 })
 
 //ROUTINGAPP ENDPOINTS
