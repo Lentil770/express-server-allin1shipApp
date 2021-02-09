@@ -17,6 +17,32 @@ db.on('connect', () => console.log('connected to mysql db'));
 db.on('end', () => console.log('mysql db connection ended.'))
 */
 
+//MANIFEST SITE ENDPOINTS 
+//idealy will be put in their own server 
+
+app.get('/getPlatforms', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `SELECT * FROM manifest_platforms;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+
+app.post('/testSendData/:platform', (req, res) => {
+  
+  console.log(req.params.platform, req.body);
+
+  res.send('testSendData endpoint')
+})
+
+//ROUTINGAPP ENDPOINTS
 
 app.get('/getcustomerslist', (req, res) => {
   console.log('lentil getting /getcustomerslist');
@@ -455,6 +481,7 @@ app.post('/postStopTask/:scheduleStopId', (req, res) => {
 })
 
 app.get('/deleteStopsTasks/:scheduleStopId', (req, res) => {
+  console.log('reqparamsschedstopid', req.params.scheduleStopId);
   const db = mysql.createConnection(dbInfo)
   db.connect();
   let sql = `
