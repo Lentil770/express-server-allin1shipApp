@@ -40,6 +40,10 @@ app.post('/testSendData', (req, res) => {
   res.send('testsenddata endpoint')
 })
 
+app.post('/filterShipments', (req, res) => {
+  console.log('filterShipments endpoint');
+})
+
 //ROUTINGAPP ENDPOINTS
 
 app.get('/getcustomerslist', (req, res) => {
@@ -373,6 +377,24 @@ app.get('/singleScheduleDisplay/:driver', (req, res) => {
 
   let sql = `SELECT * FROM
   schedules WHERE driver='${req.params.driver}' AND DATE(schedule_date)= CURDATE();
+  `;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/singleScheduleDisplay2/:driver/:date', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('getting /singleScheduleDisplay/:driver', req.params);
+
+  let sql = `SELECT * FROM
+  schedules WHERE driver='${req.params.driver}' AND DATE(schedule_date)=${req.params.date};
   `;
 
   db.query(sql, (err, result) => {
