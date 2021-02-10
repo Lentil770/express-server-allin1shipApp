@@ -388,23 +388,7 @@ app.get('/singleScheduleDisplay/:driver', (req, res) => {
   db.end();
 })
 
-app.get('/singleScheduleDisplay2/:driver/:date', (req, res) => {
-  const db = mysql.createConnection(dbInfo)
-  db.connect();
-  console.log('getting /singleScheduleDisplay/:driver', req.params);
 
-  let sql = `SELECT * FROM
-  schedules WHERE driver='${req.params.driver}' AND DATE(schedule_date)=${req.params.date};
-  `;
-
-  db.query(sql, (err, result) => {
-    if (err) {
-      throw err
-    }
-    res.json(result)
-  })
-  db.end();
-})
 
 app.get('/getVehicles', (req, res) => {
   const db = mysql.createConnection(dbInfo)
@@ -756,6 +740,32 @@ app.get('/getCurrentRouteDetails/:driver', (req, res) => {
   JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
   JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
   WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
+  ORDER BY stop_number;`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+
+app.get('/getCurrentRouteDetails2/:driver/:date', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  const today = new Date()
+  const scheduleDate = req.params.date
+ 
+  const { driver } = req.params;
+
+  let sql = `SELECT schedules.vehicle, schedules.dropoff_info, route_list.route_name, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.feedback, schedule_stop_table.completion_status, 
+  schedule_stop_table.number_packages, schedule_stop_table.check_in_time, schedule_stop_table.check_out_time, customers.customer_name FROM
+  schedules JOIN route_list ON route_list.id = schedules.route_id
+  JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
+  JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
+  WHERE schedule_date = '${scheduleDate} 08:00:00' AND driver = '${driver}'
   ORDER BY stop_number;`;
 
   db.query(sql, (err, result) => {
