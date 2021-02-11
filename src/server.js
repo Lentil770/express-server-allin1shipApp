@@ -231,7 +231,24 @@ app.get('/sendPackageNumber/:stop_id/:package_number', (req, res) => {
   })
   db.end();
 })
-app.get('/markCompletionStatus/:stop_id/', (req, res) => {
+
+app.get('/stopCompletionStatus/:stop_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('fetching stop staus of:', req.params);
+  
+  let sql = `SELECT completion_status FROM schedule_stop_tasks WHERE schedule_stop_id = ${req.params.stop_id};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/markCompletionStatus/:stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('completion received, sending to db', req.params);
