@@ -18,6 +18,24 @@ db.on('end', () => console.log('mysql db connection ended.'))
 */
 
 
+
+app.get('/stopCompletionStatus/:stop_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('fetching stop staus of:', req.params);
+  
+  let sql = `SELECT completion_status FROM schedule_stop_tasks WHERE schedule_stop_id = ${req.params.stop_id};`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    console.log(result);
+    res.json(result)
+  })
+  db.end();
+})
+
 app.get('/getcustomerslist', (req, res) => {
   console.log('lentil getting /getcustomerslist');
   const db = mysql.createConnection(dbInfo)
