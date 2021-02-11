@@ -243,8 +243,7 @@ app.get('/stopCompletionStatus/:stop_id', (req, res) => {
     if (err) {
       throw err
     }
-    if (result === 'complete') {res.json('complete')}
-    else {res.json('incomplete')}
+    res.json(result)
   })
   db.end();
 })
