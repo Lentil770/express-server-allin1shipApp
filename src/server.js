@@ -104,7 +104,6 @@ app.get('/getDailyTasks/:schedule_stop_id', (req, res) => {
   db.end();
 })
 
-
 app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -112,19 +111,14 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const todaysDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
   const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
-
-  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, 
-    schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.completion_status,
+  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number,
     customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments
-    FROM schedules JOIN route_list
-    ON schedules.route_id = route_list.id
-    JOIN stops ON stops.route_id = route_list.id
-    JOIN customers on stops.customer_id = customers.customer_id
-    JOIN schedule_stop_table ON (schedule_stop_table.schedule_id, schedule_stop_table.stop_number) = (schedules.id, stops.stop_number)
+    FROM schedules 
+    JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
+    JOIN customers schedule_stop_table.customer_id = customers.customer_id
+    JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
     WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
     ORDER BY stop_number;`;
-
-    //    WHERE schedule_date BETWEEN '${todaysDate}' AND '${tomorrowsDate}' AND driver = '${driver}'
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -136,7 +130,6 @@ app.get('/getDailySchedule/:user', (req, res) => {
   })
   db.end();
 })
-
 
 
 app.get('/getFeedbackOptions', (req, res) => {
