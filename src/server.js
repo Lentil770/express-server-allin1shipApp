@@ -18,23 +18,33 @@ db.on('end', () => console.log('mysql db connection ended.'))
 */
 
 
-app.get('/stopCompletionStatus/:stop_id', (req, res) => {
+app.get('/getPlatforms', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  console.log('fetching stop staus of:', req.params);
-  
-  let sql = `SELECT completion_status FROM schedule_stop_tasks WHERE schedule_stop_id = ${req.params.stop_id};`;
 
+  let sql = `SELECT * FROM manifest_platforms;`;
   db.query(sql, (err, result) => {
     if (err) {
       throw err
     }
-    console.log(result);
-    res.send(result)
+    res.json(result)
   })
   db.end();
 })
 
+
+app.post('/testSendData', (req, res) => {
+  
+  console.log(req.body.platform, req.body.shipments);
+
+  res.send('testsenddata endpoint')
+})
+
+app.post('/filterShipments', (req, res) => {
+  console.log('filterShipments endpoint');
+})
+
+//ROUTINGAPP ENDPOINTS
 
 app.get('/getcustomerslist', (req, res) => {
   console.log('lentil getting /getcustomerslist');
@@ -104,6 +114,7 @@ app.get('/getDailyTasks/:schedule_stop_id', (req, res) => {
   db.end();
 })
 
+
 app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -111,8 +122,8 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const todaysDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
   const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
-  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, 
-    schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.completion_status,
+
+  let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number,
     customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments
     FROM schedules 
     JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
@@ -130,6 +141,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
   })
   db.end();
 })
+
 
 
 app.get('/getFeedbackOptions', (req, res) => {
@@ -219,6 +231,7 @@ app.get('/sendPackageNumber/:stop_id/:package_number', (req, res) => {
   })
   db.end();
 })
+/* not used (just getting with schedule data)
 app.get('/stopCompletionStatus/:stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -234,7 +247,7 @@ app.get('/stopCompletionStatus/:stop_id', (req, res) => {
   })
   db.end();
 })
-
+*/
 app.get('/markCompletionStatus/:stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -297,9 +310,9 @@ app.post('/sendTaskCompletion/:stop_id', (req, res) => {
 })
 
 
-//ADMIN APP ENDPOINTS
+//ADMIN APP ENDPOINTS 
 
-
+/* 
 app.get('/singleRouteDisplay/:route_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -319,6 +332,61 @@ app.get('/singleRouteDisplay/:route_id', (req, res) => {
   })
   db.end();
 })
+*/
+
+app.get('/defaultRouteDisplay/:route_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('getting /defaultRouteDisplay/:route_id');
+
+  let sql =  `SELECT stops.id, stops.stop_number, stops.customer_id, customers.customer_id, customers.address, customers.customer_name
+  FROM stops
+  JOIN customers ON stops.customer_id = customers.customer_id
+  WHERE route_id = ${req.params.route_id}
+  ORDER BY stop_number;`;
+/*
+  let sql = `SELECT  stops.id, stop_number, notes, address, customer_name, customers.customer_id FROM
+  route_list JOIN stops ON stops.route_id = route_list.id
+  JOIN customers ON stops.customer_id = customers.customer_id
+  WHERE route_id = ${req.params.route_id}
+  ORDER BY stop_number;`;
+*/
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/singleRouteDisplay/:schedule_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('getting /singleRouteDisplay/:route_id');
+
+  let sql =  `SELECT schedule_stop_table.schedule_stop_id, schedule_stop_table.customer_id, schedule_stop_table.stop_number, customers.customer_id, customers.address, customers.customer_name
+    FROM schedule_stop_table 
+    JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
+    WHERE schedule_id = ${req.params.schedule_id}
+    ORDER BY stop_number;`;
+/*
+  let sql = `SELECT  stops.id, stop_number, notes, address, customer_name, customers.customer_id FROM
+  route_list JOIN stops ON stops.route_id = route_list.id
+  JOIN customers ON stops.customer_id = customers.customer_id
+  WHERE route_id = ${req.params.route_id}
+  ORDER BY stop_number;`;
+*/
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
 
 app.get('/getRouteTasks/:stop_id', (req, res) => {
   /*
@@ -328,7 +396,7 @@ app.get('/getRouteTasks/:stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `SELECT * FROM default_stop_tasks WHERE stop_id = ${req.params.stop_id} ORDER BY stop_id;`;
+  let sql = `SELECT * FROM schedule_stop_tasks WHERE schedule_stop_id = ${req.params.stop_id} ORDER BY schedule_stop_id;`;
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -347,7 +415,7 @@ app.get('/singleScheduleDisplay/:driver', (req, res) => {
   console.log('getting /singleScheduleDisplay/:driver');
 
   let sql = `SELECT * FROM
-  schedules WHERE driver=${req.params.driver} AND DATE(schedule_date)= CURDATE();
+  schedules WHERE driver='${req.params.driver}' AND DATE(schedule_date)= CURDATE();
   `;
 
   db.query(sql, (err, result) => {
@@ -358,6 +426,8 @@ app.get('/singleScheduleDisplay/:driver', (req, res) => {
   })
   db.end();
 })
+
+
 
 app.get('/getVehicles', (req, res) => {
   const db = mysql.createConnection(dbInfo)
@@ -449,6 +519,55 @@ app.post('/postStopTask/:scheduleStopId', (req, res) => {
       throw err
     }
     res.json(result)
+  })
+  db.end();
+})
+
+app.get('/deleteStopsTasks/:scheduleStopId', (req, res) => {
+  console.log('reqparamsschedstopid', req.params.scheduleStopId);
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  let sql = `
+  DELETE FROM schedule_stop_tasks WHERE schedule_stop_id=${req.params.scheduleStopId};
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+app.post('/alterStopTask/:scheduleStopId', (req, res) => {
+  //res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  let sql = `
+  INSERT INTO schedule_stop_tasks(schedule_stop_id, task)
+    VALUES (${req.params.scheduleStopId}, '${req.body.task}');
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.post('/alterScheduleStops', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  let sql = `UPDATE schedule_stop_table SET customer_id=${req.body.customerId}
+    WHERE schedule_id=${req.body.scheduleId} AND stop_number=${req.body.stopNumber};
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result.insertId)
   })
   db.end();
 })
@@ -671,7 +790,6 @@ app.get('/getCurrentRouteDetails/:driver', (req, res) => {
   db.end();
 })
 */
-
 app.get('/getCurrentRouteDetails/:driver/:date', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
