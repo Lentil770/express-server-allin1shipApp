@@ -682,8 +682,6 @@ app.get('/getCurrentRouteDetails/:driver', (req, res) => {
 app.get('/getCurrentRouteDetails/:driver/:date', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  const today = new Date()
-  const scheduleDate = req.params.date
   const scheduleDate = decodeURI(req.params.date)
 
   const { driver } = req.params;
