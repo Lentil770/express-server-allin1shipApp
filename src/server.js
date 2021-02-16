@@ -124,7 +124,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const driver = req.params.user;
 
   let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, 
-    schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.completion_status,
+    schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.completion_status
     FROM schedules 
     JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
     JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
