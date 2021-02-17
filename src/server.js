@@ -55,14 +55,15 @@ app.get('/getPreviousManifests', (req, res) => {
 app.post('/testSendData', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect()
-  //console.log('feedback received, sending to db', req.body);
+  console.log('feedback received, sending to db');
+  console.log(req.body);
   let sql = `SELECT allinoy4_allin1ship.manifest.name FROM allinoy4_allin1ship.manifest;`
   db.query(sql, (err, result) => {
     if (err) {
-    //  console.log('error sending feedback to db');
+      console.log('error sending feedback to db');
       throw err
     }
-    //console.log('feedback successfully sent to db');
+    console.log('feedback successfully sent to db');
     res.json(req.body)
   })
   db.end();
