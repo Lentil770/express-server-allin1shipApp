@@ -11,14 +11,34 @@ const dbInfo = {
   database: 'allinoy4_app'
 }
 
+const dbInfoB = {
+  host : process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: 'allinoy4_allin1ship'
+}
 //db.connect()
 /*
 db.on('connect', () => console.log('connected to mysql db'));
 db.on('end', () => console.log('mysql db connection ended.'))
 */
 
-
+//MANIFEST ENDPOINTS, JUST HERE FOR NOW...
 app.get('/getPlatforms', (req, res) => {
+  const db = mysql.createConnection(dbInfoB)
+  db.connect();
+
+  let sql = `SELECT manifest.name FROM manifest;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+app.get('/getPreviousManifests', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
@@ -31,7 +51,6 @@ app.get('/getPlatforms', (req, res) => {
   })
   db.end();
 })
-
 
 app.post('/testSendData', (req, res) => {
   
