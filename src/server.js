@@ -42,7 +42,7 @@ app.get('/getPreviousManifests', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `SELECT manifest.name FROM manifest;`;
+  let sql = `SELECT allinoy4_allin1ship.manifest.name FROM allinoy4_allin1ship.manifest;`;
   db.query(sql, (err, result) => {
     if (err) {
       throw err
