@@ -53,10 +53,19 @@ app.get('/getPreviousManifests', (req, res) => {
 })
 
 app.post('/testSendData', (req, res) => {
-  
-  console.log(req.body.platform, req.body.shipments);
-
-  res.send('testsenddata endpoint')
+  const db = mysql.createConnection(dbInfo)
+  db.connect()
+  //console.log('feedback received, sending to db', req.body);
+  let sql = `SELECT allinoy4_allin1ship.manifest.name FROM allinoy4_allin1ship.manifest;`
+  db.query(sql, (err, result) => {
+    if (err) {
+    //  console.log('error sending feedback to db');
+      throw err
+    }
+    //console.log('feedback successfully sent to db');
+    res.json(req.body)
+  })
+  db.end();
 })
 
 app.post('/filterShipments', (req, res) => {
