@@ -57,6 +57,8 @@ app.post('/testSendData', (req, res) => {
   db.connect()
   console.log('feedback received, sending to db');
   console.log(req.body);
+
+  //just a random line of sql.
   let sql = `SELECT allinoy4_allin1ship.manifest.name FROM allinoy4_allin1ship.manifest;`
   db.query(sql, (err, result) => {
     if (err) {
@@ -120,7 +122,22 @@ let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropof
 */
 
 //ROUTINGAPP ENDPOINTS
-
+app.get('/getAccounts', (req, res) => {
+  console.log('lentil getting /getcustomerslist');
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('connected to db');
+  let sql = 'SELECT * FROM user';
+  db.query(sql, (err, result) => {
+    if (err) {
+      //console.log('error in db.query getcustomerslist.')
+      throw err
+    }
+    //console.log('got /getcustomerslist. result:', result)
+    res.json(result)
+  })
+  db.end();
+})
 
 app.get('/getDailyTasks/:schedule_stop_id', (req, res) => {
   /*
@@ -479,6 +496,7 @@ app.get('/getDrivers', (req, res) => {
   db.connect();
 
   let sql = `SELECT DISTINCT driver FROM schedules`;
+  //let sql = 'SELECT * FROM user';
 
   db.query(sql, (err, result) => {
     if (err) {
