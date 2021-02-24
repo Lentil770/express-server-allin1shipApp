@@ -480,7 +480,7 @@ app.get('/getVehicles', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `SELECT DISTINCT vehicle FROM schedules`;
+  let sql = `SELECT DISTINCT vehicle FROM schedules;`;
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -495,7 +495,7 @@ app.get('/getDrivers', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `SELECT DISTINCT driver FROM schedules`;
+  let sql = `SELECT DISTINCT driver FROM schedules;`;
   //let sql = 'SELECT * FROM user';
 
   db.query(sql, (err, result) => {
