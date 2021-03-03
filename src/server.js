@@ -507,6 +507,22 @@ app.get('/getDrivers', (req, res) => {
   db.end();
 })
 
+app.get('/addDriver/:driverName', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+
+  let sql = `INSERT INTO schedules (driver, vehicle) VALUES (${req.params.driverName}, '2019 Ford Transit (White)');`;
+  //let sql = 'SELECT * FROM user';
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 app.get('/getNumberRoutes', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
