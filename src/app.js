@@ -20,10 +20,10 @@ app.use(cors())
 app.use(express.json())
 
 
-const dateFormated = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+let dateFormated = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
 app.get('/', (req, res) => {
-  res.send(dateFormated)
+  res.send(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''))
 })
 
 app.use(function errorHandler(error, req, res, next) {

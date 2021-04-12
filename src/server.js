@@ -2,7 +2,7 @@ const mysql = require('mysql')
 const app = require('./app')
 const { PORT }= require('./config')
 
-const dateFormatted = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+let dateFormatted = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
 const dbInfo = {
   host : process.env.DB_HOST,
@@ -171,7 +171,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
 
   let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, 
     schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.completion_status,
-    customers.customer_name, customers.address, customers.location, customers.contact_name, customers.contact_number, customers.comments
+    customers.customer_name, customers.address, customers.latitude, customers.longitude, customers.location, customers.contact_name, customers.contact_number, customers.comments
     FROM schedules 
     JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
     JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
@@ -221,7 +221,7 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
   db.connect();
   console.log('start time received, sending to db', req.params);
   //switch now to server time bc more accurate
-  let sql = `UPDATE schedule_stop_table SET check_in_time=${dateFormatted} WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
+  let sql = `UPDATE schedule_stop_table SET check_in_time=${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')} WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
       throw err
