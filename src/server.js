@@ -2,7 +2,7 @@ const mysql = require('mysql')
 const app = require('./app')
 const { PORT }= require('./config')
 
-
+const dateFormatted = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
 const dbInfo = {
   host : process.env.DB_HOST,
@@ -220,8 +220,8 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('start time received, sending to db', req.params);
-  
-  let sql = `UPDATE schedule_stop_table SET check_in_time=now() WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
+  //switch now to server time bc more accurate
+  let sql = `UPDATE schedule_stop_table SET check_in_time=${dateFormatted} WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
       throw err
