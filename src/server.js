@@ -846,7 +846,7 @@ app.post('/editCustomerData', (req, res) => {
   db.connect();
   console.log(req.body);
 
-  let sql = `UPDATE customers SET customer_name='${req.body.customer_name}', Address='${req.body.address}', location='${req.body.location}', contact_name='${req.body.contact_name}', contact_number='${req.body.contact_number}', comments='${req.body.comments}' WHERE customer_id=${req.body.customer_id}`;
+  let sql = `UPDATE customers SET customer_name='${req.body.customer_name}', Address='${req.body.address}', location='${req.body.location}', contact_name='${req.body.contact_name}', contact_number='${req.body.contact_number}', comments='${req.body.comments}', latitude='${req.body.latitude}', longitude=${req.body.longitude} WHERE customer_id=${req.body.customer_id}`;
 
   db.query(sql, (err, result) => {
     if (err) {
