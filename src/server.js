@@ -808,6 +808,21 @@ app.post('/postNewRoute', (req, res) => {
   db.end();
 })
 
+app.get('/getAllCustomersData', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `SELECT * FROM customers;`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 app.post('/postNewCustomer', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
