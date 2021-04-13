@@ -826,8 +826,29 @@ app.post('/postNewCustomer', (req, res) => {
   db.end();
 })
 
+app.post('/editCustomerData', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `UPDATE customers SET customer_name='${req.body.customer_name}', address=${req.body.address}, location=${req.body.location}, contact_name=${req.body.contact_name}, contact_number=${req.body.contact_number}, comments=${req.body.comments} WHERE customer_id=${req.body.customer_id}`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.json(result)
+  })
+  db.end();
+})
+
+
 
 //DISPLAY FEEDBACK ENDPOINTS
+
+
+
 /*
 app.get('/getCurrentRouteDetails/:driver', (req, res) => {
   const db = mysql.createConnection(dbInfo)
