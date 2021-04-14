@@ -221,7 +221,7 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
   db.connect();
   console.log('start time received, sending to db', req.params);
   //switch now to server time bc more accurate
-  let sql = `UPDATE schedule_stop_table SET check_in_time=${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')} WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
+  let sql = `UPDATE schedule_stop_table SET check_in_time=now() WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
       throw err
