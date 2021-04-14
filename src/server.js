@@ -328,6 +328,7 @@ app.post('/sendFeedback/:sched_stop_id', (req, res) => {
   db.end();
 })
 
+//CHECK IF THIS WORKS? BC TWO RESPONSES - NEED TO TAKE OUT ONE?
 app.post('/sendTaskCompletion/:stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect()
@@ -656,7 +657,7 @@ app.post('/postChangedComments/:route_id', (req, res) => {
   db.connect();
   console.log(req.body);
 
-  let sql = `UPDATE stops SET notes='${req.body.comment}' WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
+  let sql = `DELETE FROM stops WHERE route_id=${req.params.route_id}`
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -667,19 +668,38 @@ app.post('/postChangedComments/:route_id', (req, res) => {
   db.end();
 })
 
-app.post('/postStopChanges/:route_id', (req, res) => {
+
+app.get('/deleteRouteStops/:route_id', (req, res) => {
+  console.log('reqparamsschedstopid', req.params.scheduleStopId);
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  console.log(req.body);
-
-  let sql = `UPDATE stops SET notes='${req.body.notes ? req.body.notes : null}', stop_number=${req.body.stop_number}, customer_id=${req.body.customer_id} WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
-
+  let sql = `
+  DELETE FROM schedule_stop_tasks WHERE schedule_stop_id=${req.params.scheduleStopId};
+  `
   db.query(sql, (err, result) => {
     if (err) {
       throw err
     }
     res.json(result)
   })
+  db.end();
+})
+app.post('/postStopChanges/:route_id', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+
+  let sql = `INSERT INTO stops(route_id, stop_number, customer_id)
+  VALUES (${req.params.route_id}, ${req.body.key}, ${req.body.customer_id});
+  `
+  //let sql = `UPDATE stops SET stop_number=${req.body.key}, customer_id=${req.body.customer_id} WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)  
+    })
   db.end();
 })
 
