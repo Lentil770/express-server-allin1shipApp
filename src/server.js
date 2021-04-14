@@ -123,10 +123,8 @@ let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropof
 
 //ROUTINGAPP ENDPOINTS
 app.get('/getAccounts', (req, res) => {
-  console.log('lentil getting /getcustomerslist');
   const db = mysql.createConnection(dbInfo)
-  db.connect();
-  console.log('connected to db');
+  db.connect()
   let sql = 'SELECT * FROM user';
   db.query(sql, (err, result) => {
     if (err) {
@@ -510,11 +508,11 @@ app.get('/getDrivers', (req, res) => {
   db.end();
 })
 
-app.get('/addDriver/:driverName', (req, res) => {
+app.get('/addDriver/:driverName/:password', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `INSERT INTO schedules (driver, vehicle) VALUES (${req.params.driverName}, '2019 Ford Transit (White)');`;
+  let sql = `INSERT INTO user (driverName, password) VALUES ('${req.params.driverName}', '${req.params.password}');`;
   //let sql = 'SELECT * FROM user';
 
   db.query(sql, (err, result) => {
