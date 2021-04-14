@@ -178,12 +178,14 @@ app.get('/getDailySchedule/:user', (req, res) => {
     WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
     ORDER BY stop_number;`;
 
+    console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
     //  console.log('error in db.query of /getdailyschedule/:user');
       throw err
     }
     //console.log('got db.query of getdailyschedule/user. result:')
+    console.log(result);
     res.json(result)
   })
   db.end();
@@ -672,7 +674,7 @@ app.post('/postStopChanges/:route_id', (req, res) => {
   db.connect();
   console.log(req.body);
 
-  let sql = `UPDATE stops SET notes='${req.body.notes}', stop_number=${req.body.stop_number}, customer_id=${req.body.customer_id} WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
+  let sql = `UPDATE stops SET notes='${req.body.notes ? req.body.notes : null}', stop_number=${req.body.stop_number}, customer_id=${req.body.customer_id} WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
 
   db.query(sql, (err, result) => {
     if (err) {
