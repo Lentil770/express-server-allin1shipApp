@@ -512,8 +512,7 @@ app.get('/addDriver/:driverName/:password', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
 
-  let sql = `INSERT INTO user (driverName, password) VALUES ('${req.params.driverName}', '${req.params.password}');`;
-  //let sql = 'SELECT * FROM user';
+  let sql = `INSERT INTO user (username, password) VALUES ('${req.params.driverName}', ${req.params.password});`;
 
   db.query(sql, (err, result) => {
     if (err) {
