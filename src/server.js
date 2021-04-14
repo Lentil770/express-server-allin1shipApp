@@ -165,7 +165,7 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   const today = new Date()
-  const todaysDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  const todaysDate = today.getFullYear()+'-'+ (today.getMonth()+1 < 10) && 0 + (today.getMonth()+1)+'-'+today.getDate();
   const tomorrowsDate = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
   const driver = req.params.user;
 
