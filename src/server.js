@@ -652,12 +652,15 @@ app.post('/alterSchedule/:schedule_id', (req, res) => {
   db.end();
 })
 
+//WAHT IS HAPPENING HERE?/???
 app.post('/postChangedComments/:route_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
 
-  let sql = `DELETE FROM stops WHERE route_id=${req.params.route_id}`
+  let sql = `UPDATE stops SET notes='${req.body.comment}' WHERE route_id=${req.params.route_id} AND stop_number=${req.body.key}`;
+  //should be above, but found it changed to below... changed back - CHECK THIS!
+  //let sql = `DELETE FROM stops WHERE route_id=${req.params.route_id}`
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -668,14 +671,16 @@ app.post('/postChangedComments/:route_id', (req, res) => {
   db.end();
 })
 
-
+//!!!!!
 app.get('/deleteRouteStops/:route_id', (req, res) => {
-  console.log('reqparamsschedstopid', req.params.scheduleStopId);
+  
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  let sql = `
+  //why is this my sql??? complettely wtong...!
+  let sql = `DELETE FROM stops WHERE route_id=${req.params.route_id}`
+  /*let sql = `
   DELETE FROM schedule_stop_tasks WHERE schedule_stop_id=${req.params.scheduleStopId};
-  `
+  `*/
   db.query(sql, (err, result) => {
     if (err) {
       throw err
@@ -684,6 +689,7 @@ app.get('/deleteRouteStops/:route_id', (req, res) => {
   })
   db.end();
 })
+
 app.post('/postStopChanges/:route_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -702,7 +708,7 @@ app.post('/postStopChanges/:route_id', (req, res) => {
     })
   db.end();
 })
-
+//!!!!!
 app.post('/postScheduleChanges/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
