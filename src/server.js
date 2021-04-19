@@ -588,6 +588,7 @@ app.post('/postStopTask/:scheduleStopId', (req, res) => {
   db.end();
 })
 
+//!!!BEGINNING OF EDIT SCHEDULE PAGE ENDPOINJTS
 app.get('/deleteStopsTasks/:scheduleStopId', (req, res) => {
   console.log('reqparamsschedstopid', req.params.scheduleStopId);
   const db = mysql.createConnection(dbInfo)
@@ -603,6 +604,7 @@ app.get('/deleteStopsTasks/:scheduleStopId', (req, res) => {
   })
   db.end();
 })
+
 app.post('/alterStopTask/:scheduleStopId', (req, res) => {
   //res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
   const db = mysql.createConnection(dbInfo)
@@ -621,12 +623,47 @@ app.post('/alterStopTask/:scheduleStopId', (req, res) => {
   db.end();
 })
 
-app.post('/alterScheduleStops', (req, res) => {
+app.post('/postScheduleStop', (req, res) => {
+  //res.send('insert req.body and req.params.scheduleStopId to sched_stop_tasks')
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
+  let sql = `
+  INSERT INTO schedule_stop_table(schedule_id, customer_id, stop_number)
+    VALUES (${req.body.scheduleId}, ${req.body.customerId}, ${req.body.stopNumber});
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
+/*app.post('/alterScheduleStops', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  //need to also update date etc if changex.
   let sql = `UPDATE schedule_stop_table SET customer_id=${req.body.customerId}
     WHERE schedule_id=${req.body.scheduleId} AND stop_number=${req.body.stopNumber};
+  `
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result.insertId)
+  })
+  db.end();
+})*/
+
+app.post('/dropScheduleStops', (req, res) => {
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log(req.body);
+  //need to also update date etc if changex.
+  let sql = `DELETE FROM schedule_stop_table WHERE schedule_id=${req.body.scheduleId};
   `
   db.query(sql, (err, result) => {
     if (err) {
@@ -651,6 +688,8 @@ app.post('/alterSchedule/:schedule_id', (req, res) => {
   })
   db.end();
 })
+//!!!!! end of edit schedule endpoints
+
 
 //WAHT IS HAPPENING HERE?/???
 app.post('/postChangedComments/:route_id', (req, res) => {
@@ -671,7 +710,7 @@ app.post('/postChangedComments/:route_id', (req, res) => {
   db.end();
 })
 
-//!!!!!
+//!!!BEGINNING OF EDIT DEFAULT ROUTE PAGE ENDPOINTS
 app.get('/deleteRouteStops/:route_id', (req, res) => {
   
   const db = mysql.createConnection(dbInfo)
@@ -708,7 +747,8 @@ app.post('/postStopChanges/:route_id', (req, res) => {
     })
   db.end();
 })
-//!!!!!
+//!!END OF EDITDEFAULTROUTE ENDPOINTS
+
 app.post('/postScheduleChanges/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
