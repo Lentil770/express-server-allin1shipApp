@@ -7,8 +7,8 @@ const { NODE_ENV } = require('./config')
 
 const app = express()
 
-var Moment = require('moment-timezone');
-Moment().tz('America/New_York').format();
+const  Moment = require('moment-timezone');
+const nyTime = Moment().tz('America/New_York').format();
 
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
@@ -23,7 +23,7 @@ app.use(express.json())
 let dateFormated = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
 app.get('/', (req, res) => {
-  res.send(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''))
+  res.send(nyTime)
 })
 
 app.use(function errorHandler(error, req, res, next) {

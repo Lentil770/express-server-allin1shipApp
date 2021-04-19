@@ -2,6 +2,9 @@ const mysql = require('mysql')
 const app = require('./app')
 const { PORT }= require('./config')
 
+const  Moment = require('moment-timezone');
+const nyTime = Moment().tz('America/New_York').format();
+
 let dateFormatted = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
 const dbInfo = {
@@ -222,7 +225,7 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
   db.connect();
   console.log('start time received, sending to db', req.params);
   //switch now to server time bc more accurate
-  let sql = `UPDATE schedule_stop_table SET check_in_time=now() WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
+  let sql = `UPDATE schedule_stop_table SET check_in_time=${nyTime} WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
       throw err
