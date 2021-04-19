@@ -232,6 +232,24 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
   db.end();
 })
 
+app.get('/sendScheduleStartTime/:driver', (req, res) => {
+  const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+today.getDate();
+  const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+(today.getDate()+1);
+  
+  const db = mysql.createConnection(dbInfo)
+  db.connect();
+  console.log('start time received, sending to db', req.params);
+  //switch now to server time bc more accurate
+  let sql = `UPDATE schedules SET start_time=now() WHERE driver=${req.params.driver} AND WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00';`
+  db.query(sql, (err, result) => {
+    if (err) {
+      throw err
+    }
+    res.json(result)
+  })
+  db.end();
+})
+
 app.get('/markTaskComplete/:task_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
@@ -1010,6 +1028,8 @@ app.get('/getStartTimesData/:driver', (req, res) => {
   })
   db.end();
 })
+
+
 
 //fetches daily stop timestamps for driver(add date filter to get the days starts?)
 app.get('/getTimestampsData/:driver', (req, res) => {
