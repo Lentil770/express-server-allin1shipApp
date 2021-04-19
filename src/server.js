@@ -233,6 +233,8 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
 })
 
 app.get('/sendScheduleStartTime/:driver', (req, res) => {
+  
+  const today = new Date()
   const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+today.getDate();
   const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+(today.getDate()+1);
   
