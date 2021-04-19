@@ -676,12 +676,12 @@ app.post('/postScheduleStop', (req, res) => {
   db.end();
 })*/
 
-app.get('/dropScheduleStops', (req, res) => {
+app.get('/dropScheduleStops:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
   //need to also update date etc if changex.
-  let sql = `DELETE FROM schedule_stop_table WHERE schedule_id=${req.body.scheduleId};
+  let sql = `DELETE FROM schedule_stop_table WHERE schedule_id=${req.params.schedule_id};
   `
   db.query(sql, (err, result) => {
     if (err) {
@@ -692,6 +692,7 @@ app.get('/dropScheduleStops', (req, res) => {
   db.end();
 })
 
+//ERROR ERROR
 app.post('/alterSchedule/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
