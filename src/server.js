@@ -240,7 +240,7 @@ app.get('/sendScheduleStartTime/:driver', (req, res) => {
   db.connect();
   console.log('start time received, sending to db', req.params);
   //switch now to server time bc more accurate
-  let sql = `UPDATE schedules SET start_time=now() WHERE driver=${req.params.driver} AND WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00';`
+  let sql = `UPDATE schedules SET start_time=now() WHERE driver=${req.params.driver} AND schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00';`
   db.query(sql, (err, result) => {
     if (err) {
       throw err
