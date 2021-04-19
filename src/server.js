@@ -676,7 +676,7 @@ app.post('/postScheduleStop', (req, res) => {
   db.end();
 })*/
 
-app.get('/dropScheduleStops:schedule_id', (req, res) => {
+app.get('/dropScheduleStops/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
