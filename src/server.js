@@ -985,7 +985,7 @@ app.get('/getCurrentRouteDetails/:driver/:date', (req, res) => {
 
   const { driver } = req.params;
 
-  let sql = `SELECT schedules.vehicle, schedules.dropoff_info, route_list.route_name, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.feedback, schedule_stop_table.completion_status, 
+  let sql = `SELECT schedules.vehicle, schedules.dropoff_info, schedules.start_time, route_list.route_name, schedule_stop_table.schedule_stop_id, schedule_stop_table.stop_number, schedule_stop_table.feedback, schedule_stop_table.completion_status, 
   schedule_stop_table.number_packages, schedule_stop_table.check_in_time, schedule_stop_table.check_out_time, customers.customer_name FROM
   schedules JOIN route_list ON route_list.id = schedules.route_id
   JOIN schedule_stop_table ON schedule_stop_table.schedule_id = schedules.id
