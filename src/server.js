@@ -167,8 +167,10 @@ app.get('/getDailySchedule/:user', (req, res) => {
   db.connect();
   const today = new Date()
   const addZeroToMonth = ( parseInt(today.getMonth()+1) < 10) ? '0' : '';
-  const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+today.getDate();
-  const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+(today.getDate()+1);
+  const addZeroToToday = ( parseInt(today.getDate()) < 10) ? '0' : '';
+  const addZeroToTomorrow = ( parseInt(today.getDate()+1) < 10) ? '0' : '';
+  const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+ addZeroToToday + today.getDate();
+  const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+addZeroToTomorrow + (today.getDate()+1);
   const driver = req.params.user;
 
   let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, 
@@ -238,9 +240,11 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
 app.get('/sendScheduleStartTime/:driver', (req, res) => {
   
   const today = new Date()
-  const addZeroToMonth = (today.getMonth()+1 < 10) ? 0 : '';
-  const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+today.getDate();
-  const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+(today.getDate()+1);
+  const addZeroToMonth = ( parseInt(today.getMonth()+1) < 10) ? '0' : '';
+  const addZeroToToday = ( parseInt(today.getDate()) < 10) ? '0' : '';
+  const addZeroToTomorrow = ( parseInt(today.getDate()+1) < 10) ? '0' : '';
+  const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+ addZeroToToday + today.getDate();
+  const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+addZeroToTomorrow + (today.getDate()+1);
   
   const db = mysql.createConnection(dbInfo)
   db.connect();
