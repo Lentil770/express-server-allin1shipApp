@@ -617,13 +617,17 @@ app.post('/postStopTask/:scheduleStopId', (req, res) => {
 })
 
 //!!!BEGINNING OF EDIT SCHEDULE PAGE ENDPOINJTS
-app.get('/deleteStopsTasks/:scheduleStopId', (req, res) => {
+app.delete('/deleteStopsTasks', (req, res) => {
+  //accepts array of schedulestopids and deletes each ones stops from db. untested.
   console.log('reqparamsschedstopid', req.params.scheduleStopId);
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  let sql = `
-  DELETE FROM schedule_stop_tasks WHERE schedule_stop_id=${req.params.scheduleStopId};
-  `
+  let sql;
+
+  for (let i=0;i<req.body.scheduleStopIds.length;i++) {
+    sql.push(`DELETE FROM schedule_stop_tasks WHERE schedule_stop_id=${req.body.scheduleStopIds[i]};`)
+  }
+  console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
       throw err
