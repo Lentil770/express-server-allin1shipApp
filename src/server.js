@@ -799,7 +799,7 @@ app.get('/getCustomersData', (req, res) => {
   db.connect();
   console.log(req.body);
 
-  let sql = `SELECT customer_id, customer_name FROM customers;`;
+  let sql = `SELECT customer_id, customer_name, address FROM customers;`;
   db.query(sql, (err, result) => {
     if (err) {
       throw err
