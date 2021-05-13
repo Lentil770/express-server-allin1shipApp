@@ -1,21 +1,21 @@
 const mysql = require('mysql')
 const app = require('./app')
-const { PORT }= require('./config')
+const { PORT } = require('./config')
 
-const  Moment = require('moment-timezone');
+const Moment = require('moment-timezone');
 const nyTime = Moment().tz('America/New_York').format();
 
 let dateFormatted = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
 const dbInfo = {
-  host : process.env.DB_HOST,
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: 'allinoy4_app'
 }
 
 const dbInfoB = {
-  host : process.env.DB_HOST,
+  host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: 'allinoy4_allin1ship'
@@ -152,7 +152,7 @@ app.get('/getDailyTasks/:schedule_stop_id', (req, res) => {
 
   db.query(sql, (err, result) => {
     if (err) {
-    //  console.log('error in db.query of /getdailyschedule/:user');
+      //  console.log('error in db.query of /getdailyschedule/:user');
       throw err
     }
     //console.log('got db.query of getdailyschedule/user. result:')
@@ -166,11 +166,11 @@ app.get('/getDailySchedule/:user', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   const today = new Date()
-  const addZeroToMonth = ( parseInt(today.getMonth()+1) < 10) ? '0' : '';
-  const addZeroToToday = ( parseInt(today.getDate()) < 10) ? '0' : '';
-  const addZeroToTomorrow = ( parseInt(today.getDate()+1) < 10) ? '0' : '';
-  const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+ addZeroToToday + today.getDate();
-  const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+addZeroToTomorrow + (today.getDate()+1);
+  const addZeroToMonth = (parseInt(today.getMonth() + 1) < 10) ? '0' : '';
+  const addZeroToToday = (parseInt(today.getDate()) < 10) ? '0' : '';
+  const addZeroToTomorrow = (parseInt(today.getDate() + 1) < 10) ? '0' : '';
+  const todaysDate = today.getFullYear() + '-' + addZeroToMonth + (today.getMonth() + 1) + '-' + addZeroToToday + today.getDate();
+  const tomorrowsDate = today.getFullYear() + '-' + addZeroToMonth + (today.getMonth() + 1) + '-' + addZeroToTomorrow + (today.getDate() + 1);
   const driver = req.params.user;
 
   let sql = `SELECT DISTINCT schedules.vehicle, schedules.driver, schedules.dropoff_info, 
@@ -182,10 +182,10 @@ app.get('/getDailySchedule/:user', (req, res) => {
     WHERE schedule_date >= '${todaysDate} 08:00:00' AND schedule_date < '${tomorrowsDate} 08:00:00' AND driver = '${driver}'
     ORDER BY stop_number;`;
 
-    console.log(sql);
+  console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
-    //  console.log('error in db.query of /getdailyschedule/:user');
+      //  console.log('error in db.query of /getdailyschedule/:user');
       throw err
     }
     //console.log('got db.query of getdailyschedule/user. result:')
@@ -209,7 +209,7 @@ app.get('/sendTimestamp/:sched_stop_id', (req, res) => {
   console.log('timestamp received, sending to db', req.params);
   //this needs to receive drivers name, timestamp and date (and stop number?),
   //and add them to database
-  
+
   let sql = `UPDATE schedule_stop_table SET check_out_time=now() WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   /*INSERT INTO timestamps (time_completed, driver, stop_number) 
   VALUES (now(), "${req.params.driver}", ${req.params.stop_number});`*/
@@ -238,14 +238,14 @@ app.get('/sendStartTime/:sched_stop_id', (req, res) => {
 })
 
 app.get('/sendScheduleStartTime/:driver', (req, res) => {
-  
+
   const today = new Date()
-  const addZeroToMonth = ( parseInt(today.getMonth()+1) < 10) ? '0' : '';
-  const addZeroToToday = ( parseInt(today.getDate()) < 10) ? '0' : '';
-  const addZeroToTomorrow = ( parseInt(today.getDate()+1) < 10) ? '0' : '';
-  const todaysDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+ addZeroToToday + today.getDate();
-  const tomorrowsDate = today.getFullYear()+'-'+ addZeroToMonth + (today.getMonth()+1)+'-'+addZeroToTomorrow + (today.getDate()+1);
-  
+  const addZeroToMonth = (parseInt(today.getMonth() + 1) < 10) ? '0' : '';
+  const addZeroToToday = (parseInt(today.getDate()) < 10) ? '0' : '';
+  const addZeroToTomorrow = (parseInt(today.getDate() + 1) < 10) ? '0' : '';
+  const todaysDate = today.getFullYear() + '-' + addZeroToMonth + (today.getMonth() + 1) + '-' + addZeroToToday + today.getDate();
+  const tomorrowsDate = today.getFullYear() + '-' + addZeroToMonth + (today.getMonth() + 1) + '-' + addZeroToTomorrow + (today.getDate() + 1);
+
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('start time received, sending to db', req.params);
@@ -264,7 +264,7 @@ app.get('/markTaskComplete/:task_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('task recieved, sending to db', req.params);
-  
+
   let sql = `UPDATE schedule_stop_tasks SET completion_status='complete' WHERE schedule_stop_tasks.task_id=${req.params.task_id};`;
 
   db.query(sql, (err, result) => {
@@ -280,7 +280,7 @@ app.get('/markTaskIncomplete/:task_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('task received, sending to db', req.params);
-  
+
   let sql = `UPDATE schedule_stop_tasks SET completion_status='incomplete' WHERE schedule_stop_tasks.task_id=${req.params.task_id};`;
 
   db.query(sql, (err, result) => {
@@ -296,7 +296,7 @@ app.get('/sendPackageNumber/:stop_id/:package_number', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('package number received, sending to db', req.params);
-  
+
   let sql = `UPDATE schedule_stop_table SET number_packages='${req.params.package_number}' WHERE schedule_stop_table.schedule_stop_id=${req.params.stop_id};`;
 
   db.query(sql, (err, result) => {
@@ -328,7 +328,7 @@ app.get('/markCompletionStatus/:stop_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log('completion received, sending to db', req.params);
-  
+
   let sql = `UPDATE schedule_stop_table SET completion_status='complete' WHERE schedule_stop_table.schedule_stop_id=${req.params.stop_id};`;
 
   db.query(sql, (err, result) => {
@@ -347,7 +347,7 @@ app.post('/sendFeedback/:sched_stop_id', (req, res) => {
   let sql = `UPDATE schedule_stop_table SET feedback='${req.body.feedback}' WHERE schedule_stop_table.schedule_stop_id=${req.params.sched_stop_id};`
   db.query(sql, (err, result) => {
     if (err) {
-    //  console.log('error sending feedback to db');
+      //  console.log('error sending feedback to db');
       throw err
     }
     //console.log('feedback successfully sent to db');
@@ -369,7 +369,7 @@ app.post('/sendTaskCompletion/:stop_id', (req, res) => {
 
   db.query(sql1, (err, result) => {
     if (err) {
-    //  console.log('error sending feedback to db');
+      //  console.log('error sending feedback to db');
       throw err
     }
     //console.log('feedback successfully sent to db');
@@ -377,7 +377,7 @@ app.post('/sendTaskCompletion/:stop_id', (req, res) => {
   })
   db.query(sql2, (err, result) => {
     if (err) {
-    //  console.log('error sending feedback to db');
+      //  console.log('error sending feedback to db');
       throw err
     }
     //console.log('feedback successfully sent to db');
@@ -416,18 +416,18 @@ app.get('/defaultRouteDisplay/:route_id', (req, res) => {
   db.connect();
   console.log('getting /defaultRouteDisplay/:route_id');
 
-  let sql =  `SELECT stops.id, stops.stop_number, stops.customer_id, customers.customer_id, customers.address, customers.customer_name
+  let sql = `SELECT stops.id, stops.stop_number, stops.customer_id, customers.customer_id, customers.address, customers.customer_name
   FROM stops
   JOIN customers ON stops.customer_id = customers.customer_id
   WHERE route_id = ${req.params.route_id}
   ORDER BY stop_number;`;
-/*
-  let sql = `SELECT  stops.id, stop_number, notes, address, customer_name, customers.customer_id FROM
-  route_list JOIN stops ON stops.route_id = route_list.id
-  JOIN customers ON stops.customer_id = customers.customer_id
-  WHERE route_id = ${req.params.route_id}
-  ORDER BY stop_number;`;
-*/
+  /*
+    let sql = `SELECT  stops.id, stop_number, notes, address, customer_name, customers.customer_id FROM
+    route_list JOIN stops ON stops.route_id = route_list.id
+    JOIN customers ON stops.customer_id = customers.customer_id
+    WHERE route_id = ${req.params.route_id}
+    ORDER BY stop_number;`;
+  */
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -443,18 +443,18 @@ app.get('/singleRouteDisplay/:schedule_id', (req, res) => {
   db.connect();
   console.log('getting /singleRouteDisplay/:route_id');
 
-  let sql =  `SELECT schedule_stop_table.schedule_stop_id, schedule_stop_table.customer_id, schedule_stop_table.stop_number, customers.customer_id, customers.address, customers.customer_name
+  let sql = `SELECT schedule_stop_table.schedule_stop_id, schedule_stop_table.customer_id, schedule_stop_table.stop_number, customers.customer_id, customers.address, customers.customer_name
     FROM schedule_stop_table 
     JOIN customers ON schedule_stop_table.customer_id = customers.customer_id
     WHERE schedule_id = ${req.params.schedule_id}
     ORDER BY stop_number;`;
-/*
-  let sql = `SELECT  stops.id, stop_number, notes, address, customer_name, customers.customer_id FROM
-  route_list JOIN stops ON stops.route_id = route_list.id
-  JOIN customers ON stops.customer_id = customers.customer_id
-  WHERE route_id = ${req.params.route_id}
-  ORDER BY stop_number;`;
-*/
+  /*
+    let sql = `SELECT  stops.id, stop_number, notes, address, customer_name, customers.customer_id FROM
+    route_list JOIN stops ON stops.route_id = route_list.id
+    JOIN customers ON stops.customer_id = customers.customer_id
+    WHERE route_id = ${req.params.route_id}
+    ORDER BY stop_number;`;
+  */
 
   db.query(sql, (err, result) => {
     if (err) {
@@ -477,7 +477,7 @@ app.get('/getRouteTasks/:stop_id', (req, res) => {
 
   db.query(sql, (err, result) => {
     if (err) {
-    //  console.log('error in db.query of /getdailyschedule/:user');
+      //  console.log('error in db.query of /getdailyschedule/:user');
       throw err
     }
     //console.log('got db.query of getdailyschedule/user. result:')
@@ -622,13 +622,18 @@ app.post('/deleteStopsTasks', (req, res) => {
   console.log('reqparamsschedstopid', req.body);
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  let sqlResult;
+  let sqlResult = [];
 
-  for (let i=0;i<req.body.scheduleStopIds.length;i++) {
+  for (let i = 0; i < req.body.scheduleStopIds.length; i++) {
+    console.log('delete tsask:', i);
     let sql = `DELETE FROM schedule_stop_tasks WHERE schedule_stop_id=${req.body.scheduleStopIds[i]};`
     db.query(sql, (err, result) => {
-      if (err) throw err
-      sqlResult.push(result)
+      if (err) {
+        throw err
+      } else {
+        console.log('one delete done');
+        sqlResult.push(result)
+      }
     })
   }
   /*console.log(sql);
@@ -699,7 +704,7 @@ app.post('/postScheduleStop', (req, res) => {
 app.get('/dropScheduleStops/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  console.log(req.body);
+  console.log('dropschedukestops body: ', req.body);
   //need to also update date etc if changex.
   let sql = `DELETE FROM schedule_stop_table WHERE schedule_id=${req.params.schedule_id};
   `
@@ -716,7 +721,7 @@ app.get('/dropScheduleStops/:schedule_id', (req, res) => {
 app.post('/alterSchedule/:schedule_id', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
-  console.log(req.body); 
+  console.log(req.body);
   let sql = `UPDATE schedules SET schedule_date='${req.body.selectedDate} 08:00:00', driver='${req.body.selectedDriver}', vehicle='${req.body.selectedVehicle}', dropoff_info='${req.body.selectedDropOffInfo}', route_id=${req.body.selectedDefaultRoute}
   WHERE schedules.id=${req.params.schedule_id}`;
   db.query(sql, (err, result) => {
@@ -751,7 +756,7 @@ app.post('/postChangedComments/:route_id', (req, res) => {
 
 //!!!BEGINNING OF EDIT DEFAULT ROUTE PAGE ENDPOINTS
 app.get('/deleteRouteStops/:route_id', (req, res) => {
-  
+
   const db = mysql.createConnection(dbInfo)
   db.connect();
   //why is this my sql??? complettely wtong...!
@@ -782,8 +787,8 @@ app.post('/postStopChanges/:route_id', (req, res) => {
     if (err) {
       throw err
     }
-    res.json(result)  
-    })
+    res.json(result)
+  })
   db.end();
 })
 //!!END OF EDITDEFAULTROUTE ENDPOINTS
@@ -900,7 +905,7 @@ app.post('/postNewRoute', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
-//can i get customer_id? or should i get address and find id in sql?
+  //can i get customer_id? or should i get address and find id in sql?
   let sql = `INSERT INTO stops (route_id, stop_number, customer_id, notes)
   VALUES (${req.body.route_id}, ${req.body.stop_number}, ${req.body.customer_id}, '${req.body.notes}');`
 
@@ -932,7 +937,7 @@ app.post('/postNewCustomer', (req, res) => {
   const db = mysql.createConnection(dbInfo)
   db.connect();
   console.log(req.body);
-//can i get customer_id? or should i get address and find id in sql?
+  //can i get customer_id? or should i get address and find id in sql?
   let sql = `INSERT INTO customers (customer_name, address, location, contact_name, contact_number, comments, active)
   VALUES ('${req.body.customer_name}', '${req.body.address}', '${req.body.location}', '${req.body.contact_name}', ${req.body.contact_number}, '${req.body.comments}', 1);`
 
